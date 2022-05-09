@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "755a2ed4-51fa-4a53-939d-846679552c9c": {
+      "ProjectGuid": "755a2ed4-51fa-4a53-939d-846679552c9c",
+      "DisplayName": "AppGui",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}
