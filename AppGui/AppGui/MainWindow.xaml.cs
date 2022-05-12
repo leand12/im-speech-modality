@@ -10,6 +10,13 @@ using Newtonsoft.Json;
 using System.Diagnostics;
 using AudioSwitcher.AudioApi.CoreAudio;
 
+using System.Windows.Interop;
+
+using System.Runtime.InteropServices;
+using System.Diagnostics;
+using System.Windows.Forms;
+
+
 namespace AppGui
 {
     /// <summary>
@@ -71,24 +78,42 @@ namespace AppGui
                 {
                     case "GREEN":
                         //_s.Fill = Brushes.Green;
-                        var psi = new ProcessStartInfo()
-                        {
-                            FileName = @"C:\Riot Games",
-                            UseShellExecute = true
-                        };
-                        Process.Start(psi);
+
+                        //var psi = new ProcessStartInfo()
+                        //{
+                        //    FileName = @"C:\Riot Games",
+                        //    UseShellExecute = true
+                        //};
+                        //Process.Start(psi);
+
+
                         break;
                     case "BLUE":
                         //_s.Fill = Brushes.Blue;
-                        Process.Start("calc.exe");
-                        Process.Start("www.google.com");
-                        Process.Start("www.facebook.com");
+
+                        //Process.Start("calc.exe");
+                        //Process.Start("www.google.com");
+                        //Process.Start("www.facebook.com");
                         break;
                     case "RED":
                         //_s.Fill = Brushes.Red;
-                        CoreAudioDevice defaultPlaybackDevice = new CoreAudioController().DefaultPlaybackDevice;
-                        Debug.WriteLine("Current Volume:" + defaultPlaybackDevice.Volume);
-                        defaultPlaybackDevice.Volume += 10;
+
+                        /*
+                        Process[] processlist = Process.GetProcesses();
+                        foreach (Process process in processlist)
+                        {
+                            if (!String.IsNullOrEmpty(process.MainWindowTitle))
+                            {
+                                Console.WriteLine("Process: {0} ID: {1} Window title: {2}", process.ProcessName, process.Id, process.MainWindowTitle);
+                            }
+                        }
+                        */
+
+                        MoveWindowTo(WP_DOWN | WP_RIGHT);
+
+                        //CoreAudioDevice defaultPlaybackDevice = new CoreAudioController().DefaultPlaybackDevice;
+                        //Debug.WriteLine("Current Volume:" + defaultPlaybackDevice.Volume);
+                        //defaultPlaybackDevice.Volume += 10;
                         break;
                 }
             });
@@ -112,6 +137,56 @@ namespace AppGui
             mmic.Send(exNot);
 
 
+        }
+
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, int uFlags);
+
+        private const int SWP_NOSIZE = 0x0001;
+        private const int SWP_NOZORDER = 0x0004;
+        private const int SWP_SHOWWINDOW = 0x0040;
+
+        private const int WP_UP = 0b0001;
+        private const int WP_DOWN = 0b0010;
+        private const int WP_LEFT = 0b0100;
+        private const int WP_RIGHT = 0b1000;
+
+        private void MoveWindowTo(int position)
+        {
+            System.Drawing.Rectangle area = Screen.PrimaryScreen.WorkingArea;
+            int x = 0;
+            int y = 0;
+            int height = area.Height;
+            int width = area.Width;
+
+            if ((position & WP_UP) > 0)
+            {
+                height /= 2;
+            }
+            else if ((position & WP_DOWN) > 0)
+            {
+                height /= 2;
+                y = height;
+            }
+            if ((position & WP_LEFT) > 0)
+            {
+                width /= 2;
+            }
+            else if ((position & WP_RIGHT) > 0)
+            {
+                width /= 2;
+                x = width;
+            }
+
+            Process process = Process.GetProcessesByName("Notepad").FirstOrDefault();
+
+            IntPtr handle = process.MainWindowHandle;
+            Console.WriteLine(process.ProcessName + " " + process.Id + " " + process.MachineName);
+            if (handle != IntPtr.Zero)
+            {
+                Console.WriteLine("ok");
+                SetWindowPos(handle, IntPtr.Zero, x, y, width, height, SWP_NOZORDER | SWP_SHOWWINDOW);
+            }
         }
     }
 }
