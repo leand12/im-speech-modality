@@ -1,29 +1,175 @@
 ﻿<?xml version="1.0"?>
 <grammar xml:lang="pt-PT" version="1.0" xmlns="http://www.w3.org/2001/06/grammar" tag-format="semantics/1.0">
 	<rule id="rootRule" scope="public">
-	  <item>
-		  <item>
-			<ruleref uri="#object"/>
-			<tag>out.shape=rules.latest();</tag>
-		  </item>
-		  <item>
-			<ruleref uri="#color"/>
-			<tag>out.color=rules.latest();</tag>
-		  </item>
-	  </item>
+		<one-of>
+			<item>
+				<!--Action + Application-->
+				<ruleref uri="#AppAction" />
+				<ruleref uri="#App" />
+
+				<tag>out.target=rules.App; out.action=rules.AppAction;</tag>
+
+			</item>
+
+			<item>
+        <!--Calc-->
+				fazer contas <tag>out.targer="CALC"; out.action="OPEN";</tag>
+			</item>
+		</one-of>
 	</rule>
-	<rule id="object">
-	  <one-of>
-		<item>quadrado<tag>out="SQUARE"</tag></item>
-		<item>círculo<tag>out="CIRCLE"</tag></item>
-		<item>triângulo<tag>out="TRIANGLE"</tag></item>
-	  </one-of>
+
+	<rule id="AppAction">
+		<one-of>
+			<item>
+				<!--Open Action-->
+				<ruleref uri="#OpenAppAction" />
+				<tag>out="OPEN"</tag>
+			</item>
+
+			<item>
+				<!--Close Action-->
+				<ruleref uri="#CloseAppAction" />
+				<tag>out="CLOSE"</tag>
+			</item>
+
+			<item>
+				<!--Move Action-->
+				<ruleref uri="#MoveAppAction" />
+				<tag>out="Move"</tag>
+			</item>
+
+			<item>
+				<!--Minimize Action-->
+				<ruleref uri="#MinimizeAppAction" />
+				<tag>out="Minimize"</tag>
+			</item>
+
+			<item>
+				<!--Maximize Action-->
+				<ruleref uri="#MaximizeAppAction" />
+				<tag>out="Maximize"</tag>
+			</item>
+
+			<item>
+				<!--Show Action-->
+				<ruleref uri="#ShowAppAction" />
+				<tag>out="Show"</tag>
+			</item>
+
+		</one-of>
 	</rule>
-	<rule id="color">
-	  <one-of>
-		<item>verde<tag>out="GREEN"</tag></item>
-		<item>azul<tag>out="BLUE"</tag></item>
-		<item>vermelho<tag>out="RED"</tag></item>
-	  </one-of>
+
+	<rule id="App">
+		<item repeat="0-1">
+			<one-of>
+				<item>o</item>
+				<item>a</item>
+			</one-of>
+		</item>
+		<one-of>
+			<item>
+				<!--Spotify-->
+				spotify
+				<tag>out="Spotify"</tag>
+			</item>
+			<item>
+				<!--Calculadora-->
+				calculadora
+				<tag>out="Calculator"</tag>
+			</item>
+			<item>
+				<!--Notepad-->
+				<one-of>
+					<item>notepad</item>
+					<item>bloco</item>
+					<item>texto</item>
+					<item>notas</item>
+					<item>bloco de notas</item>
+					<item>bloco de texto</item>
+					<item>editor de texto</item>
+				</one-of>
+				<tag>out="Notepad"</tag>
+			</item>
+		</one-of>
 	</rule>
+
+
+	
+	
+	
+	<rule id="OpenAppAction">
+		<one-of>
+			<item>abrir</item>
+			<item>abre</item>
+			<item>executar</item>
+			<item>executa</item>
+			<item>inicializar</item>
+			<item>inicializa</item>
+		</one-of>
+	</rule>
+
+	<rule id="CloseAppAction">
+		<one-of>
+			<item>fechar</item>
+			<item>fecha</item>
+			<item>terminar</item>
+			<item>termina</item>
+		</one-of>
+	</rule>
+
+	<rule id="MoveAppAction">
+		<one-of>
+			<item>mover</item>
+			<item>move</item>
+			<item>meter</item>
+			<item>mete</item>
+			<item>colocar</item>
+			<item>coloca</item>
+			<item>encaixar</item>
+			<item>encaixa</item>
+		</one-of>
+	</rule>
+
+	<rule id="MinimizeAppAction">
+		<one-of>
+			<item>minimizar</item>
+			<item>minimiza</item>
+			<item>esconder</item>
+			<item>esconde</item>
+			<item>ocultar</item>
+			<item>oculta</item>
+		</one-of>
+	</rule>
+
+	<rule id="MaximizeAppAction">
+		<one-of>
+			<item>maximizar</item>
+			<item>maximiza</item>
+			<item>expandir</item>
+			<item>expande</item>
+		</one-of>
+	</rule>
+
+	<rule id="ShowAppAction">
+		<one-of>
+			<item>mostrar</item>
+			<item>mostra</item>
+			<item>
+				<one-of>
+					<item>trazer</item>
+					<item>traz</item>
+					<item>mover</item>
+					<item>move</item>
+					<item>meter</item>
+					<item>mete</item>
+				</one-of>
+				<one-of>
+					<item>para a</item>
+					<item>à</item>
+				</one-of>
+				frente
+			</item>
+		</one-of>
+	</rule>
+
 </grammar>
