@@ -34,6 +34,7 @@ namespace speechModality
         {
             result.Text = e.Text;
             confidence.Text = e.Confidence+"";
+            _out.Text = e.Out;
             if (e.Final) result.FontWeight = FontWeights.Bold;
             else result.FontWeight = FontWeights.Normal;
         }

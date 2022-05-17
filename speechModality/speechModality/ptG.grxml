@@ -3,17 +3,22 @@
 	<rule id="rootRule" scope="public">
 		<one-of>
 			<item>
-				<!--Action + Application-->
+				<!--Action [+ Application]-->
 				<ruleref uri="#AppAction" />
-				<ruleref uri="#App" />
-
-				<tag>out.target=rules.App; out.action=rules.AppAction;</tag>
-
+				<tag>out.action=rules.AppAction.action; out.direction=rules.AppAction.direction; out.target="LAST";</tag>
+				<item repeat="0-1">
+					<ruleref uri="#App" />
+					<tag>out.target=rules.App; </tag>
+				</item>
 			</item>
 
 			<item>
-        <!--Calc-->
-				fazer contas <tag>out.targer="CALC"; out.action="OPEN";</tag>
+				<!--Calc-->
+				fazer contas <tag>out.action="OPEN"; out.target="CALC";</tag>
+			</item>
+			<item>
+				<!--Word-->
+				quero escrever um texto <tag>out.action="OPEN"; out.target="WORD";</tag>
 			</item>
 		</one-of>
 	</rule>
@@ -23,80 +28,73 @@
 			<item>
 				<!--Open Action-->
 				<ruleref uri="#OpenAppAction" />
-				<tag>out="OPEN"</tag>
+				<tag>out.action="OPEN"</tag>
 			</item>
 
 			<item>
 				<!--Close Action-->
 				<ruleref uri="#CloseAppAction" />
-				<tag>out="CLOSE"</tag>
+				<tag>out.action="CLOSE"</tag>
 			</item>
 
 			<item>
 				<!--Move Action-->
 				<ruleref uri="#MoveAppAction" />
-				<tag>out="Move"</tag>
+				<tag>out.action="MOVE"; out.direction=rules.MoveAppAction</tag>
 			</item>
 
 			<item>
 				<!--Minimize Action-->
 				<ruleref uri="#MinimizeAppAction" />
-				<tag>out="Minimize"</tag>
+				<tag>out.action="MINIMIZE"</tag>
 			</item>
 
 			<item>
 				<!--Maximize Action-->
 				<ruleref uri="#MaximizeAppAction" />
-				<tag>out="Maximize"</tag>
+				<tag>out.action="MAXIMIZE"</tag>
 			</item>
 
 			<item>
 				<!--Show Action-->
 				<ruleref uri="#ShowAppAction" />
-				<tag>out="Show"</tag>
+				<tag>out.action="SHOW"</tag>
 			</item>
 
 		</one-of>
 	</rule>
 
 	<rule id="App">
-		<item repeat="0-1">
-			<one-of>
-				<item>o</item>
-				<item>a</item>
-			</one-of>
-		</item>
 		<one-of>
 			<item>
 				<!--Spotify-->
+				<item repeat="0-1">o</item>
 				spotify
-				<tag>out="Spotify"</tag>
+				<tag>out="SPOTIFY"</tag>
 			</item>
 			<item>
 				<!--Calculadora-->
+				<item repeat="0-1">a</item>
 				calculadora
-				<tag>out="Calculator"</tag>
+				<tag>out="CALC"</tag>
 			</item>
 			<item>
 				<!--Notepad-->
+				<item repeat="0-1">o</item>
 				<one-of>
 					<item>notepad</item>
 					<item>bloco</item>
 					<item>texto</item>
-					<item>notas</item>
 					<item>bloco de notas</item>
 					<item>bloco de texto</item>
 					<item>editor de texto</item>
 				</one-of>
-				<tag>out="Notepad"</tag>
+				<tag>out="NOTEPAD"</tag>
 			</item>
 		</one-of>
 	</rule>
 
 
-	
-	
-	
 	<rule id="OpenAppAction">
 		<one-of>
 			<item>abrir</item>
@@ -127,6 +125,24 @@
 			<item>coloca</item>
 			<item>encaixar</item>
 			<item>encaixa</item>
+		</one-of>
+		<one-of>
+			<item>
+				<ruleref uri="#HDirection" />
+				<tag>out=rules.HDirection</tag>
+				<item repeat="0-1">
+					<ruleref uri="#VDirection" />
+					<tag>out=rules.HDirection + "_" + rules.VDirection;</tag>
+				</item>
+			</item>
+			<item>
+				<ruleref uri="#VDirection" />
+				<tag>out=rules.VDirection</tag>
+				<item repeat="0-1">
+					<ruleref uri="#HDirection" />
+					<tag>out=rules.HDirection + "_" + rules.VDirection;</tag>
+				</item>
+			</item>
 		</one-of>
 	</rule>
 
@@ -168,6 +184,60 @@
 					<item>à</item>
 				</one-of>
 				frente
+			</item>
+		</one-of>
+	</rule>
+
+	<rule id="HDirection">
+		<item repeat="0-1">
+			<one-of>
+				<item>para a</item>
+				<item>à</item>
+			</one-of>
+		</item>
+		<one-of>
+			<item>
+				esquerda<tag>out="LEFT"</tag>
+			</item>
+			<item>
+				direita<tag>out="RIGHT"</tag>
+			</item>
+		</one-of>
+	</rule>
+
+	<rule id="VDirection">
+		<one-of>
+			<item>
+				<item repeat="0-1">
+					<one-of>
+						<item>para</item>
+						<item>em</item>
+					</one-of>
+				</item>
+				<one-of>
+					<item>
+						cima<tag>out="UP"</tag>
+					</item>
+					<item>
+						baixo<tag>out="DOWN"</tag>
+					</item>
+				</one-of>
+			</item>
+			<item>
+				<item repeat="0-1">
+					<one-of>
+						<item>para o</item>
+						<item>no</item>
+					</one-of>
+				</item>
+				<one-of>
+					<item>
+						topo<tag>out="UP"</tag>
+					</item>
+					<item>
+						fundo<tag>out="DOWN"</tag>
+					</item>
+				</one-of>
 			</item>
 		</one-of>
 	</rule>

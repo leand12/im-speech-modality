@@ -32,7 +32,7 @@ namespace speechModality
 
             //create speech synthesizer
             tts = new SpeechSynthesizer();
-
+            tts.TtsVolume = 100;
 
             // show voices 
             // Initialize a new instance of the SpeechSynthesizer.
@@ -84,7 +84,7 @@ namespace speechModality
 
 
             //set voice
-            tts.SelectVoiceByHints(VoiceGender.Male, VoiceAge.NotSet, 0, new System.Globalization.CultureInfo("pt-PT"));
+            tts.SelectVoiceByHints(VoiceGender.Female, VoiceAge.NotSet, 0, new System.Globalization.CultureInfo("pt-PT"));
 
             //tts.SelectVoice("...")
 

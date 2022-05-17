@@ -17,6 +17,8 @@ using System.Diagnostics;
 using System.Windows.Forms;
 
 
+
+
 namespace AppGui
 {
     /// <summary>
@@ -52,6 +54,24 @@ namespace AppGui
         private String getFile(Int32 handle)
         {
             return "";
+        }
+
+
+        enum DesktopAccess : uint
+        {
+            DesktopReadobjects = 0x0001,
+            DesktopCreatewindow = 0x0002,
+            DesktopCreatemenu = 0x0004,
+            DesktopHookcontrol = 0x0008,
+            DesktopJournalrecord = 0x0010,
+            DesktopJournalplayback = 0x0020,
+            DesktopEnumerate = 0x0040,
+            DesktopWriteobjects = 0x0080,
+            DesktopSwitchdesktop = 0x0100,
+
+            GenericAll = DesktopReadobjects | DesktopCreatewindow | DesktopCreatemenu |
+                         DesktopHookcontrol | DesktopJournalrecord | DesktopJournalplayback |
+                         DesktopEnumerate | DesktopWriteobjects | DesktopSwitchdesktop
         }
 
         private void MmiC_Message(object sender, MmiEventArgs e)
@@ -97,6 +117,8 @@ namespace AppGui
                         break;
                     case "RED":
                         //_s.Fill = Brushes.Red;
+
+                        Process.Start("microsoft.windows.camera:");
 
                         /*
                         Process[] processlist = Process.GetProcesses();
