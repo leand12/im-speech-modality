@@ -12,6 +12,12 @@
 				</item>
 			</item>
 
+      <item>
+        <!--System Action-->
+        <ruleref uri="#SystemAction" />
+        <tag>out.target="SYSTEM"; out.action=rules.SystemAction.action; out.value=rules.SystemAction.value;</tag>
+      </item>  
+        
 			<item>
 				<!--Calc-->
 				fazer contas <tag>out.action="OPEN"; out.target="CALC";</tag>
@@ -94,6 +100,7 @@
 		</one-of>
 	</rule>
 
+	
 
 	<rule id="OpenAppAction">
 		<one-of>
@@ -241,5 +248,77 @@
 			</item>
 		</one-of>
 	</rule>
+  
+
+  
+	<!--System Actions-->
+	
+  <rule	id="SystemAction">
+    <one-of>
+
+      <item>
+        <!-- Volume or Brightness -->
+        <one-of>
+					<item>aumenta  <tag>out.value="+";</tag> </item>
+					<item>aumentar <tag>out.value="+";</tag> </item>
+					<item>diminui  <tag>out.value="-";</tag> </item>
+					<item>diminuir <tag>out.value="-";</tag> </item>
+        </one-of>
+
+        <one-of>
+          <item>o brilho			 <tag>out.action="BRIGHT";</tag> </item>
+          <item>a luz					 <tag>out.action="BRIGHT";</tag> </item>
+          <item>a luminosidade <tag>out.action="BRIGHT";</tag> </item>
+          <item>o som					 <tag>out.action="VOLUME";</tag> </item>
+          <item>o volume       <tag>out.action="VOLUME";</tag> </item>
+				</one-of>
+      
+				<!--TODO: adicionar a quantidade com um item repeat 0-1 -->
+      </item>
+
+      <item>
+				<!-- Volume -->  
+				<ruleref uri="#VolumeAction" />
+        <tag>out.value=rules.VolumeAction.value; out.action="VOLUME";</tag>
+      </item>
+    
+  
+    </one-of>  
+  </rule>
+  
+  <rule id="VolumeAction">
+    
+		<one-of>
+      
+      <item>
+        <tag>out.value=0;</tag>
+        <one-of>
+          <item>    
+						está muito barulho 
+					</item>
+          <item>
+            silêncio
+          </item>  
+        </one-of>
+      </item>
+
+      <item>
+        <tag>out.value=100;</tag>
+        <one-of>
+          <item>
+            podes falar mais alto
+          </item>
+          <item>
+						não consigo ouvir nada 
+          </item>
+        </one-of>
+      </item>
+    
+		</one-of>
+  </rule>
+  
+  
+
+
 
 </grammar>
