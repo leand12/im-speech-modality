@@ -88,7 +88,7 @@ namespace speechModality
             }
 
             // skip when not enough confidence
-            if (e.Result.Confidence < 0.7)
+            if (e.Result.Confidence < 0.3)
             {
                 tts.Speak("Podes repetir?");
                 return;

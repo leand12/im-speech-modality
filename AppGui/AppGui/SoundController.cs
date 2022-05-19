@@ -10,20 +10,52 @@ namespace AppGui
 {
     class SoundController
     {
-        private static CoreAudioDevice defaultPlaybackDevice = new CoreAudioController().DefaultPlaybackDevice;
+        private CoreAudioDevice defaultPlaybackDevice = new CoreAudioController().DefaultPlaybackDevice;
+
+        /**
+         * Executes a given action taking into consideration the provided args.
+         */
+        public bool Execute(string[] args)
+        {
+            if (args.Length == 0)
+                return false;
+
+            string action = args[0];
+
+            switch (action)
+            {
+                case "+":
+                    Set((int)Get() + 10);
+                    break;
+                case "-":
+                    Set((int)Get() - 10);
+                    break;
+                case ".":
+                    string value = args[1];
+                    Set(int.Parse(value));
+                    break;
+                default:
+                    return false;
+            }
+
+            return true;
+        }
 
         /** 
          * Sets the current volume to be equal to the provided value
          */
-        public static void Set(int volume)
+        private void Set(int volume)
         {
             defaultPlaybackDevice.Volume = volume;
+            // if the volume is increased but the speaker is muted, unmute
+            if (volume > 0 && defaultPlaybackDevice.IsMuted)
+                defaultPlaybackDevice.ToggleMute();
         }
 
         /** 
          * Returns the current volume value
          */
-        public static double Get()
+        private double Get()
         {
             return defaultPlaybackDevice.Volume;
         }
