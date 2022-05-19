@@ -15,7 +15,7 @@
       <item>
         <!--System Action-->
         <ruleref uri="#SystemAction" />
-        <tag>out.target="SYSTEM"; out.action=rules.SystemAction.action; out.value=rules.SystemAction.value;</tag>
+        <tag>out.target=rules.SystemAction.target; out.action=rules.SystemAction.action; out.value=rules.SystemAction.value;</tag>
       </item>  
         
 			<item>
@@ -259,18 +259,18 @@
       <item>
         <!-- Volume or Brightness -->
         <one-of>
-					<item>aumenta  <tag>out.value="+";</tag> </item>
-					<item>aumentar <tag>out.value="+";</tag> </item>
-					<item>diminui  <tag>out.value="-";</tag> </item>
-					<item>diminuir <tag>out.value="-";</tag> </item>
+					<item>aumenta  <tag>out.action="+";</tag> </item>
+					<item>aumentar <tag>out.action="+";</tag> </item>
+					<item>diminui  <tag>out.action="-";</tag> </item>
+					<item>diminuir <tag>out.action="-";</tag> </item>
         </one-of>
 
         <one-of>
-          <item>o brilho			 <tag>out.action="BRIGHT";</tag> </item>
-          <item>a luz					 <tag>out.action="BRIGHT";</tag> </item>
-          <item>a luminosidade <tag>out.action="BRIGHT";</tag> </item>
-          <item>o som					 <tag>out.action="VOLUME";</tag> </item>
-          <item>o volume       <tag>out.action="VOLUME";</tag> </item>
+          <item>o brilho			 <tag>out.target="BRIGHT";</tag> </item>
+          <item>a luz					 <tag>out.target="BRIGHT";</tag> </item>
+          <item>a luminosidade <tag>out.target="BRIGHT";</tag> </item>
+          <item>o som					 <tag>out.target="VOLUME";</tag> </item>
+          <item>o volume       <tag>out.target="VOLUME";</tag> </item>
 				</one-of>
       
 				<!--TODO: adicionar a quantidade com um item repeat 0-1 -->
@@ -279,7 +279,7 @@
       <item>
 				<!-- Volume -->  
 				<ruleref uri="#VolumeAction" />
-        <tag>out.value=rules.VolumeAction.value; out.action="VOLUME";</tag>
+        <tag>out.value=rules.VolumeAction.value; out.target="VOLUME"; out.action=".";</tag>
       </item>
     
   
