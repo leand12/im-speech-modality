@@ -10,10 +10,40 @@ namespace AppGui
 {
     class BrightnessController
     {
+
+        /**
+         * Executes a given action taking into consideration the provided args.
+         */
+        public bool Execute(string[] args)
+        {
+
+            if (args.Length == 0)
+                return false;
+
+            string action = args[0];
+
+            switch (action)
+            {
+                case "+":
+                    Set(Get() + 10);
+                    break;
+                case "-":
+                    Set(Get() - 10);
+                    break;
+                case ".":
+                    // TODO: n sei se isto vai existir
+                    break;
+                default:
+                    return false;
+            }
+
+            return true;
+        }
+
         /**
          * Returns the current brightness value
          */
-        public static int Get()
+        private int Get()
         {
             var mclass = new ManagementClass("WmiMonitorBrightness")
             {
@@ -30,7 +60,7 @@ namespace AppGui
         /**
          * Sets the screen brightness value. Only works for laptop.
          */
-        public static void Set(int brightness)
+        private void Set(int brightness)
         {
             var mclass = new ManagementClass("WmiMonitorBrightnessMethods")
             {

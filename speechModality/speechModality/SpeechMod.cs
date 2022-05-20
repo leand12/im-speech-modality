@@ -87,7 +87,7 @@ namespace speechModality
             }
 
             // skip when not enough confidence
-            if (e.Result.Confidence < 0.5)
+            if (e.Result.Confidence < 0.6)
             {
                 tts.Speak("Não oubi.");
                 return;

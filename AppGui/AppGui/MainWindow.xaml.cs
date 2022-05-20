@@ -9,14 +9,10 @@ using mmisharp;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using AudioSwitcher.AudioApi.CoreAudio;
-
 using System.Windows.Interop;
-
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Windows.Forms;
-
-
 
 
 namespace AppGui
@@ -36,10 +32,17 @@ namespace AppGui
         private LifeCycleEvents lce;
         private MmiCommunication mmic;
 
+
+        private SoundController soundController;
+        private BrightnessController brightnessController;
+
+
         public MainWindow()
         {
             InitializeComponent();
 
+            soundController = new SoundController();
+            brightnessController = new BrightnessController();
 
             mmiC = new MmiCommunication("localhost",8000, "User1", "GUI");
             mmiC.Message += MmiC_Message;
@@ -87,57 +90,24 @@ namespace AppGui
             dynamic json = JsonConvert.DeserializeObject(com);
 
 
+<<<<<<< HEAD
             fileSystemController.Execute(new string[] { "OPEN", "FILE_EXPLORER" });
             fileSystemController.Execute(new string[] { "OPEN", "DOWNLOADS" });
 
-
-            App.Current.Dispatcher.Invoke(() =>
+=======
+            // check the target for the command
+            switch (((string)json.recognized[0].ToString()).Trim())
             {
-                switch ((string)json.recognized[1].ToString())
-                {
-                    case "GREEN":
-                        //_s.Fill = Brushes.Green;
+                case "VOLUME":
+                    soundController.Execute(new string[] { (string)json.recognized[1].ToString(), (string)json.recognized[2].ToString() });
+                    break;
 
-                        //var psi = new ProcessStartInfo()
-                        //{
-                        //    FileName = @"C:\Riot Games",
-                        //    UseShellExecute = true
-                        //};
-                        //Process.Start(psi);
+                case "BRIGHT":
+                    brightnessController.Execute(new string[] { (string)json.recognized[1].ToString(), (string)json.recognized[2].ToString() });
+                    break;
+>>>>>>> 0021216b405f91707faee5ab0bd9d904b5e40065
 
-
-                        break;
-                    case "BLUE":
-                        //_s.Fill = Brushes.Blue;
-
-                        //Process.Start("calc.exe");
-                        //Process.Start("www.google.com");
-                        //Process.Start("www.facebook.com");
-                        break;
-                    case "RED":
-                        //_s.Fill = Brushes.Red;
-
-                        Process.Start("microsoft.windows.camera:");
-
-                        /*
-                        Process[] processlist = Process.GetProcesses();
-                        foreach (Process process in processlist)
-                        {
-                            if (!String.IsNullOrEmpty(process.MainWindowTitle))
-                            {
-                                Console.WriteLine("Process: {0} ID: {1} Window title: {2}", process.ProcessName, process.Id, process.MainWindowTitle);
-                            }
-                        }
-                        */
-
-                        MoveWindowTo(WP_DOWN | WP_RIGHT);
-
-                        //CoreAudioDevice defaultPlaybackDevice = new CoreAudioController().DefaultPlaybackDevice;
-                        //Debug.WriteLine("Current Volume:" + defaultPlaybackDevice.Volume);
-                        //defaultPlaybackDevice.Volume += 10;
-                        break;
-                }
-            });
+            }
 
             //  new 16 april 2020
             mmic.Send(lce.NewContextRequest());
