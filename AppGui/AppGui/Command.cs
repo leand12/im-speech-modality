@@ -8,10 +8,8 @@ namespace AppGui
 {
     class Command
     {
-        public string target { get; set; }
-        public string action { get; set; }
-        public string value  { get; set; }
-
-
+        public string Target { get; set; }
+        public string Action { get; set; }
+        public string Value  { get; set; }
     }
 }

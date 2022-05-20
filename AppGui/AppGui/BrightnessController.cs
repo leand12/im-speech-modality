@@ -14,13 +14,8 @@ namespace AppGui
         /**
          * Executes a given action taking into consideration the provided args.
          */
-        public bool Execute(string[] args)
+        public bool Execute(string action, string value)
         {
-
-            if (args.Length == 0)
-                return false;
-
-            string action = args[0];
 
             switch (action)
             {

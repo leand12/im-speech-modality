@@ -34,11 +34,9 @@ namespace AppGui
         private string last = "";
 
         // controllers
-        private FileSystemController fileSystemController;
         private SoundController soundController;
         private BrightnessController brightnessController;
-        private WindowController windowController;
-        private CamaraController camaraController;
+        private ApplicationController appController;
 
         public MainWindow()
         {
@@ -46,9 +44,7 @@ namespace AppGui
 
             soundController = new SoundController();
             brightnessController = new BrightnessController();
-            fileSystemController = new FileSystemController();
-            windowController = new WindowController();
-            camaraController = new CamaraController();
+            appController = new ApplicationController();
 
             mmiC = new MmiCommunication("localhost",8000, "User1", "GUI");
             mmiC.Message += MmiC_Message;
@@ -89,35 +85,39 @@ namespace AppGui
 
         private void MmiC_Message(object sender, MmiEventArgs e)
         {
-            Console.WriteLine(e.Message);
             var doc = XDocument.Parse(e.Message);
             var com = doc.Descendants("command").FirstOrDefault().Value;
             dynamic json = JsonConvert.DeserializeObject(com);
 
             // convert json to object
-            Command command = Newtonsoft.Json.JsonConvert.DeserializeObject<Command>(json.recognized);
+            Command command = new Command();
+            command.Target = json.recognized.target;
+            command.Action = json.recognized.action;
+            command.Value = json.recognized.value;
+
+            //Console.WriteLine(command.action);
 
             // if the target is "LAST", then provide the last one
-            if (command.target != "LAST")
-                last = command.target;
+            if (command.Target != "LAST")
+                last = command.Target;
             else
-                command.target = last;
+                command.Target = last;
 
-            switch (command.target)
+            switch (command.Target)
             {
                 case "VOLUME":
                     //camaraController.Execute(new string[] { "OPEN" });
-                    soundController.Execute(command.action, command.value);
+                    soundController.Execute(command.Action, command.Value);
                     break;
 
                 case "BRIGHT":
                     //camaraController.Execute(new string[] { "CLOSE" });
-                    brightnessController.Execute(command.action, command.value);
+                    brightnessController.Execute(command.Action, command.Value);
                     break;
 
 
                 default:
-                    ApplicationController.Execute(command.target, command.action, command.value);
+                    appController.Execute(command.Target, command.Action, command.Value);
                     //windowController.Execute(new string[] { target, (string)json.recognized[2].ToString() });
                     //fileSystemController.Execute(command.action, command.value);
                     break;

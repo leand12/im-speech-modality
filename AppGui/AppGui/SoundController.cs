@@ -15,13 +15,8 @@ namespace AppGui
         /**
          * Executes a given action taking into consideration the provided args.
          */
-        public bool Execute(string[] args)
+        public bool Execute(string action, string value)
         {
-            if (args.Length == 0)
-                return false;
-
-            string action = args[0];
-
             switch (action)
             {
                 case "+":
@@ -31,13 +26,11 @@ namespace AppGui
                     Set((int)Get() - 10);
                     break;
                 case ".":
-                    string value = args[1];
                     Set(int.Parse(value));
                     break;
                 default:
                     return false;
             }
-
             return true;
         }
 

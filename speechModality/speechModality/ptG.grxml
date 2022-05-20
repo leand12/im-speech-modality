@@ -5,7 +5,7 @@
 			<item>
 				<!--Action [+ Application]-->
 				<ruleref uri="#AppAction" />
-				<tag>out.action=rules.AppAction.action; out.target="LAST";  out.direction=rules.AppAction.direction;</tag>
+				<tag>out.action=rules.AppAction.action; out.target="LAST";  out.value=rules.AppAction.direction;</tag>
 				<item repeat="0-1">
 					<ruleref uri="#App" />
 					<tag>out.target=rules.App; </tag>
@@ -15,7 +15,7 @@
 			<item>
 				<!--File Explorer-->
 				<ruleref uri="#FileExplorer" />
-				<tag>out.target="FILE_EXPLORER"; out.action="OPEN"; out.path=rules.FileExplorer; </tag>
+				<tag>out.target="FILE_EXPLORER"; out.action="OPEN"; out.value=rules.FileExplorer; </tag>
 			</item>
 
 			<item>

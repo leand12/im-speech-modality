@@ -17,9 +17,25 @@ namespace AppGui
         [DllImport("user32.dll", SetLastError = true)]
         static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, int uFlags);
 
+        [DllImport("user32.dll")]
+        static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+        
+
         private Dictionary<string, Process> apps = new Dictionary<string, Process>();
 
+        private Dictionary<string, string> names = new Dictionary<string, string>()
+        {
+            { "CALC", "calculator" },
+            { "NOTEPAD", "Notepad" },
+            { "SPOTIFY", "Spotify" }
+        };
+
+
         /* Consts */
+
+        private const int SW_SHOWMAXIMIZED = 3;
+        private const int SW_SHOWMINIMIZED = 6;
+
         private const int SWP_NOSIZE = 0x0001;
         private const int SWP_NOZORDER = 0x0004;
         private const int SWP_SHOWWINDOW = 0x0040;
@@ -49,77 +65,39 @@ namespace AppGui
                 case "CLOSE":
                     return Close(target);
                 case "Move":
-                    return MoveWindowTo(GetProcess(target), GetPosition(action));
+                    return MoveWindowTo(target, GetPosition(action));
+                case "MAXIMIZE":
+                    return SetWindowShow(target, SW_SHOWMAXIMIZED);
+                case "MINIMIZE":
+                    return SetWindowShow(target, SW_SHOWMINIMIZED);
             }
             return false;
         }
 
         private bool Open(string target)
         {
-            switch (target)
+            if (names.ContainsKey(target))
             {
-                case "CALC":
-                    apps.Add(target, Process.Start("calculator"));
-                    break;
-                case "FILE_EXPLORER":
-                    apps.Add(target, Process.Start("file_explorer"));
-                    break;
-                case "NOTEPAD":
-                    apps.Add(target, Process.Start("Notepad"));
-                    break;
-                case "SPOTIFY":
-                    apps.Add(target, Process.Start("Spotify"));
-                    break;
-                case "CAMERA":
-                    apps.Add(target, Process.Start("microsoft.windows.camera:"));
-                    break;
-                default:
-                    return false;
+                apps.Add(target, Process.Start(names[target]));
+                return true;
             }
-            return true;
+            return false;
         }
 
         private bool Close(string target)
         {
-            Process p = null;
-            switch (target)
-            {
-                case "LAST":
-                    p = Process.GetCurrentProcess();
-:                   break;
-                case "CALC":
-                    p = FindProcess("calculator");
-                    break;
-                case "FILE_EXPLORER":
-                    p = FindProcess("file_explorer");
-                    break;
-                case "NOTEPAD":
-                    p = FindProcess("Notepad");
-                    break;
-                case "SPOTIFY":
-                    p = FindProcess("Spotify");
-                    break;
-                case "CAMERA":
-                    p = FindProcess("microsoft.windows.camera:");
-                    break;
-                default:
-                    return false;
-            }
-            if (p == null)
-            {
-                return false;
-            }
-            p.Kill();
-            return true;
-        }
-
-        private Process FindProcess(string target)
-        {
             if (apps.ContainsKey(target))
-                return apps.TryGetValue(target);
-            else:
+            {
+                apps[target].Kill();
+                apps.Remove(target);
+                return true;
+            } else if (target == "SELECTED")
+            {
+                Process.GetCurrentProcess().Kill();
+                return true;
+            }
 
-
+            return false;
         }
 
         private int GetPosition(string position)
@@ -161,8 +139,17 @@ namespace AppGui
             return null;
         }
 
-        private bool MoveWindowTo(Process process, int position)
+        private bool MoveWindowTo(string target, int position)
         {
+            Process process = null;
+            if (apps.ContainsKey(target))
+            {
+                process = apps[target];
+            }
+            else if (target == "SELECTED")
+            {
+                process = Process.GetCurrentProcess();
+            }
 
             if (process == null)
                 return false;
@@ -203,5 +190,20 @@ namespace AppGui
             return false;
         }
 
+
+        private bool SetWindowShow(string target, int value)
+        {
+            if (apps.ContainsKey(target))
+            {
+                ShowWindow(apps[target].MainWindowHandle, value);
+                return true;
+            } else if (target == "SELECTED")
+            {
+                ShowWindow(Process.GetCurrentProcess().MainWindowHandle, value);
+                return true;
+            }
+
+            return false;
+        }
     }
 }
