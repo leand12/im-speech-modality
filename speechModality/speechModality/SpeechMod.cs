@@ -81,16 +81,15 @@ namespace speechModality
         private void Sre_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
         {
             var _out = "";
-            Console.WriteLine(e.Result.Semantics);
             foreach (var resultSemantic in e.Result.Semantics)
             {
                 _out += resultSemantic.Value.Value + " ";
             }
 
             // skip when not enough confidence
-            if (e.Result.Confidence < 0.7)
+            if (e.Result.Confidence < 0.5)
             {
-                tts.Speak("Podes repetir?");
+                tts.Speak("Não oubi.");
                 return;
             }
 

@@ -28,6 +28,9 @@ namespace AppGui
     {
         private MmiCommunication mmiC;
 
+        // controllers
+        private FileSystemController fileSystemController;
+
         //  new 16 april 2020
         private MmiCommunication mmiSender;
         private LifeCycleEvents lce;
@@ -41,6 +44,8 @@ namespace AppGui
             mmiC = new MmiCommunication("localhost",8000, "User1", "GUI");
             mmiC.Message += MmiC_Message;
             mmiC.Start();
+
+            fileSystemController = new FileSystemController();
 
             // NEW 16 april 2020
             //init LifeCycleEvents..
@@ -81,16 +86,10 @@ namespace AppGui
             var com = doc.Descendants("command").FirstOrDefault().Value;
             dynamic json = JsonConvert.DeserializeObject(com);
 
-            Shape _s = null;
-            switch ((string)json.recognized[0].ToString())
-            {
-                case "SQUARE": _s = rectangle;
-                    break;
-                case "CIRCLE": _s = circle;
-                    break;
-                case "TRIANGLE": _s = triangle;
-                    break;
-            }
+
+            fileSystemController.Execute(new string[] { "OPEN", "FILE_EXPLORER" });
+            fileSystemController.Execute(new string[] { "OPEN", "DOWNLOADS" });
+
 
             App.Current.Dispatcher.Invoke(() =>
             {

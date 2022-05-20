@@ -5,13 +5,97 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AppGui"
         mc:Ignorable="d"
-        Title="MainWindow" Height="169.052" Width="240.116">
+        Title="MainWindow" Height="350" Width="600">
+
     <Grid>
-        <StackPanel Orientation="Horizontal" Margin="10">
-            <Rectangle x:Name="rectangle" Width="50" Height="50" Fill="Gray" Margin="10"></Rectangle>
-            <Ellipse x:Name="circle" Width="50" Height="50" Fill="Gray" Margin="10"></Ellipse>
-            <Polygon x:Name="triangle" Width="50" Height="50" Fill="Gray" Points="25,0 50,50 0,50" Margin="10"></Polygon>
-        </StackPanel>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="4*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="4*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+
+        <Label Name="Label1"  
+            Content="Shortcut 1"   
+            Width="100" Height="40"  
+            Margin="10,10,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            FontSize="15" FontFamily="Arial"  
+            FontWeight="Bold"/>
+        <Label Name="Label2"  
+            Content="Shortcut 2"   
+            Width="100" Height="40"  
+            Margin="10,55,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            FontSize="15" FontFamily="Arial"  
+            FontWeight="Bold"/>
+        <Label Name="Label3"  
+            Content="Shortcut 3"   
+            Width="100" Height="40"  
+            Margin="10,100,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            FontSize="15" FontFamily="Arial"  
+            FontWeight="Bold"/>
+        <Label Name="Label4"  
+            Content="Shortcut 4"   
+            Width="100" Height="40"  
+            Margin="10,145,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            FontSize="15" FontFamily="Arial"  
+            FontWeight="Bold"/>
+        <Label Name="Label5"  
+            Content="Shortcut 5"   
+            Width="100" Height="40"  
+            Margin="10,190,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            FontSize="15" FontFamily="Arial"  
+            FontWeight="Bold"/>
+
+        <TextBox Grid.Column="2" x:Name="shortcut1" 
+                 HorizontalAlignment="Left" 
+                 Height="40" Margin="10,10,0,0" 
+                 TextWrapping="Wrap" Text="C:\Users\leand\Desktop\UA\4ano\IM" 
+                 VerticalAlignment="Top" 
+                 Width="449" FontSize="20" />
+        <TextBox Grid.Column="2" x:Name="shortcut2" 
+                 HorizontalAlignment="Left" 
+                 Height="40" Margin="10,55,0,0" 
+                 TextWrapping="Wrap" Text="" 
+                 VerticalAlignment="Top"
+                 Width="449" FontSize="20" />
+        <TextBox Grid.Column="2" x:Name="shortcut3" 
+                 HorizontalAlignment="Left" 
+                 Height="40" Margin="10,100,0,0" 
+                 TextWrapping="Wrap" Text="" 
+                 VerticalAlignment="Top" 
+                 Width="449" FontSize="20" />
+        <TextBox Grid.Column="2" x:Name="shortcut4" 
+                 HorizontalAlignment="Left" 
+                 Height="40" Margin="10,145,0,0" 
+                 TextWrapping="Wrap" Text="" 
+                 VerticalAlignment="Top" 
+                 Width="449" FontSize="20" />
+        <TextBox Grid.Column="2" x:Name="shortcut5" 
+                 HorizontalAlignment="Left" 
+                 Height="40" Margin="10,190,0,0" 
+                 TextWrapping="Wrap" Text="" 
+                 VerticalAlignment="Top" 
+                 Width="449" FontSize="20" />
+
+        <TextBox Grid.Row="2" Grid.ColumnSpan="2" Name="feedback" 
+            Text="Maybe algo que o Bitor disse... Podes repetir?"  
+            Width="550" Height="40"  
+            Margin="10,10,0,0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            FontSize="20"/>
 
     </Grid>
 </Window>
