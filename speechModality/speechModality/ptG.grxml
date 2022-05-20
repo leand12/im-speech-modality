@@ -12,12 +12,18 @@
 				</item>
 			</item>
 
-      <item>
-        <!--System Action-->
-        <ruleref uri="#SystemAction" />
-        <tag>out.target="SYSTEM"; out.action=rules.SystemAction.action; out.value=rules.SystemAction.value;</tag>
-      </item>  
-        
+			<item>
+				<!--System Action-->
+				<ruleref uri="#SystemAction" />
+				<tag>out.target="SYSTEM"; out.action=rules.SystemAction.action; out.value=rules.SystemAction.value;</tag>
+			</item>
+
+			<item>
+				<!--File Explorer-->
+				<ruleref uri="#FileExplorer" />
+				<tag>out.action="OPEN"; out.target="FILE_EXPLORER"; out.path=rules.FileExplorer; </tag>
+			</item>
+
 			<item>
 				<!--Calc-->
 				fazer contas <tag>out.action="OPEN"; out.target="CALC";</tag>
@@ -100,7 +106,7 @@
 		</one-of>
 	</rule>
 
-	
+
 
 	<rule id="OpenAppAction">
 		<one-of>
@@ -248,77 +254,170 @@
 			</item>
 		</one-of>
 	</rule>
-  
 
-  
-	<!--System Actions-->
-	
-  <rule	id="SystemAction">
-    <one-of>
 
-      <item>
-        <!-- Volume or Brightness -->
-        <one-of>
-					<item>aumenta  <tag>out.value="+";</tag> </item>
-					<item>aumentar <tag>out.value="+";</tag> </item>
-					<item>diminui  <tag>out.value="-";</tag> </item>
-					<item>diminuir <tag>out.value="-";</tag> </item>
-        </one-of>
 
-        <one-of>
-          <item>o brilho			 <tag>out.action="BRIGHT";</tag> </item>
-          <item>a luz					 <tag>out.action="BRIGHT";</tag> </item>
-          <item>a luminosidade <tag>out.action="BRIGHT";</tag> </item>
-          <item>o som					 <tag>out.action="VOLUME";</tag> </item>
-          <item>o volume       <tag>out.action="VOLUME";</tag> </item>
-				</one-of>
-      
-				<!--TODO: adicionar a quantidade com um item repeat 0-1 -->
-      </item>
+	<!-- System Actions -->
 
-      <item>
-				<!-- Volume -->  
-				<ruleref uri="#VolumeAction" />
-        <tag>out.value=rules.VolumeAction.value; out.action="VOLUME";</tag>
-      </item>
-    
-  
-    </one-of>  
-  </rule>
-  
-  <rule id="VolumeAction">
-    
+	<rule	id="SystemAction">
 		<one-of>
-      
-      <item>
-        <tag>out.value=0;</tag>
-        <one-of>
-          <item>    
-						está muito barulho 
+
+			<item>
+				<!-- Volume or Brightness -->
+				<one-of>
+					<item>
+						aumenta  <tag>out.value="+";</tag>
 					</item>
-          <item>
-            silêncio
-          </item>  
-        </one-of>
-      </item>
+					<item>
+						aumentar <tag>out.value="+";</tag>
+					</item>
+					<item>
+						diminui  <tag>out.value="-";</tag>
+					</item>
+					<item>
+						diminuir <tag>out.value="-";</tag>
+					</item>
+				</one-of>
 
-      <item>
-        <tag>out.value=100;</tag>
-        <one-of>
-          <item>
-            podes falar mais alto
-          </item>
-          <item>
-						não consigo ouvir nada 
-          </item>
-        </one-of>
-      </item>
-    
+				<one-of>
+					<item>
+						o brilho        <tag>out.action="BRIGHT";</tag>
+					</item>
+					<item>
+						a luz           <tag>out.action="BRIGHT";</tag>
+					</item>
+					<item>
+						a luminosidade  <tag>out.action="BRIGHT";</tag>
+					</item>
+					<item>
+						o som           <tag>out.action="VOLUME";</tag>
+					</item>
+					<item>
+						o volume        <tag>out.action="VOLUME";</tag>
+					</item>
+				</one-of>
+
+				<!--TODO: adicionar a quantidade com um item repeat 0-1 -->
+			</item>
+
+			<item>
+				<!-- Volume -->
+				<ruleref uri="#VolumeAction" />
+				<tag>out.value=rules.VolumeAction.value; out.action="VOLUME";</tag>
+			</item>
+
+
 		</one-of>
-  </rule>
-  
-  
+	</rule>
 
+	<rule id="VolumeAction">
 
+		<one-of>
+
+			<item>
+				<tag>out.value=0;</tag>
+				<one-of>
+					<item>
+						está muito barulho
+					</item>
+					<item>
+						silêncio
+					</item>
+				</one-of>
+			</item>
+
+			<item>
+				<tag>out.value=100;</tag>
+				<one-of>
+					<item>
+						podes falar mais alto
+					</item>
+					<item>
+						não consigo ouvir nada
+					</item>
+				</one-of>
+			</item>
+
+		</one-of>
+	</rule>
+
+	<!-- File Explorer -->
+	<rule id="FileExplorer">
+		<example>ver fotografias</example>
+		<example>mostrar explorador de ficheiros</example>
+		<example>abrir explorador de ficheiros nas fotografias</example>
+
+		<one-of>
+			<item>abrir</item>
+			<item>abre</item>
+			<item>mostrar</item>
+			<item>mostra</item>
+			<item>ver</item>
+		</one-of>
+
+		<item repeat="0-1">
+			<item repeat="0-1">o</item>
+			explorador de ficheiros
+			<tag>out="FILE_EXPLORER"</tag>
+		</item>
+
+		<item repeat="0-1">
+			<one-of>
+				<item>
+					<one-of>
+						<item>fotografias</item>
+						<item>nas fotografias</item>
+						<item>em fotografias</item>
+					</one-of>
+					<tag>out="PICTURES"</tag>
+				</item>
+
+				<item>
+					<one-of>
+						<item>transferências</item>
+						<item>nas transferências</item>
+						<item>em transferências</item>
+					</one-of>
+					<tag>out="DOWNLOADS"</tag>
+				</item>
+
+				<item>
+					<one-of>
+						<item>ambiente de trabalho</item>
+						<item>no ambiente de trabalho</item>
+						<item>em ambiente de trabalho</item>
+					</one-of>
+					<tag>out="DESKTOP"</tag>
+				</item>
+
+				<item>
+					<item>atalho</item>
+					<ruleref uri="#Number" />
+					<tag>out="SHORTCUT_" + rules.Number</tag>
+				</item>
+			</one-of>
+		</item>
+	</rule>
+
+	<!-- Number -->
+	<rule id="Number">
+		<one-of>
+			<item>
+				um      <tag>out="1"</tag>
+			</item>
+			<item>
+				dois    <tag>out="2"</tag>
+			</item>
+			<item>
+				três    <tag>out="3"</tag>
+			</item>
+			<item>
+				quatro  <tag>out="4"</tag>
+			</item>
+			<item>
+				cinco   <tag>out="5"</tag>
+			</item>
+		</one-of>
+	</rule>
 
 </grammar>
