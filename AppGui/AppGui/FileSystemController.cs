@@ -12,9 +12,9 @@ namespace AppGui
 
         private Dictionary<string, string> paths = new Dictionary<string, string>()
         {
-            { "PICTURES", @"C:\Users\leand\OneDrive\Imagens" },
-            { "DOWNLOADS", @"C:\Users\leand\Downloads" },
-            { "DESKTOP", @"C:\Users\leand\Desktop" }
+            { "PICTURES", Environment.GetFolderPath(Environment.SpecialFolder.MyPictures) },
+            { "DOWNLOADS", Environment.GetFolderPath(Environment.SpecialFolder.Favorites) },
+            { "DESKTOP", Environment.GetFolderPath(Environment.SpecialFolder.Desktop) }
         };
 
         /// <summary>

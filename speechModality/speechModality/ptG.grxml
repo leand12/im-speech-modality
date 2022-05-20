@@ -5,7 +5,7 @@
 			<item>
 				<!--Action [+ Application]-->
 				<ruleref uri="#AppAction" />
-				<tag>out.action=rules.AppAction.action; out.direction=rules.AppAction.direction; out.target="LAST";</tag>
+				<tag>out.action=rules.AppAction.action; out.target="LAST";  out.direction=rules.AppAction.direction;</tag>
 				<item repeat="0-1">
 					<ruleref uri="#App" />
 					<tag>out.target=rules.App; </tag>

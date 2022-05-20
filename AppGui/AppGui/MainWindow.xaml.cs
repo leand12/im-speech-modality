@@ -24,8 +24,6 @@ namespace AppGui
     {
         private MmiCommunication mmiC;
 
-        // controllers
-        private FileSystemController fileSystemController;
 
         //  new 16 april 2020
         private MmiCommunication mmiSender;
@@ -33,9 +31,13 @@ namespace AppGui
         private MmiCommunication mmic;
 
 
+        private string last = "";
+
+        // controllers
+        private FileSystemController fileSystemController;
         private SoundController soundController;
         private BrightnessController brightnessController;
-
+        private WindowController windowController;
 
         public MainWindow()
         {
@@ -43,12 +45,13 @@ namespace AppGui
 
             soundController = new SoundController();
             brightnessController = new BrightnessController();
+            fileSystemController = new FileSystemController();
+            windowController = new WindowController();
 
             mmiC = new MmiCommunication("localhost",8000, "User1", "GUI");
             mmiC.Message += MmiC_Message;
             mmiC.Start();
 
-            fileSystemController = new FileSystemController();
 
             // NEW 16 april 2020
             //init LifeCycleEvents..
@@ -89,24 +92,29 @@ namespace AppGui
             var com = doc.Descendants("command").FirstOrDefault().Value;
             dynamic json = JsonConvert.DeserializeObject(com);
 
+            string target = (string)json.recognized[1].ToString();
+            if (target != "LAST")
+                last = target;
+            else
+                target = last;
 
-<<<<<<< HEAD
-            fileSystemController.Execute(new string[] { "OPEN", "FILE_EXPLORER" });
-            fileSystemController.Execute(new string[] { "OPEN", "DOWNLOADS" });
-
-=======
-            // check the target for the command
             switch (((string)json.recognized[0].ToString()).Trim())
             {
                 case "VOLUME":
-                    soundController.Execute(new string[] { (string)json.recognized[1].ToString(), (string)json.recognized[2].ToString() });
+                    soundController.Execute(new string[] { target, (string)json.recognized[2].ToString() });
                     break;
 
                 case "BRIGHT":
-                    brightnessController.Execute(new string[] { (string)json.recognized[1].ToString(), (string)json.recognized[2].ToString() });
+                    brightnessController.Execute(new string[] { target, (string)json.recognized[2].ToString() });
                     break;
->>>>>>> 0021216b405f91707faee5ab0bd9d904b5e40065
 
+                case "FILE_EXPLORER":
+                    fileSystemController.Execute(new string[] { target, (string)json.recognized[2].ToString() });
+                    break;
+
+                case "MOVE":
+                    windowController.Execute(new string[] { target, (string)json.recognized[2].ToString() });
+                    break;
             }
 
             //  new 16 april 2020
