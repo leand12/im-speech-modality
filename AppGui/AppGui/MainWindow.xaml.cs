@@ -38,6 +38,7 @@ namespace AppGui
         private SoundController soundController;
         private BrightnessController brightnessController;
         private WindowController windowController;
+        private CamaraController camaraController;
 
         public MainWindow()
         {
@@ -47,6 +48,7 @@ namespace AppGui
             brightnessController = new BrightnessController();
             fileSystemController = new FileSystemController();
             windowController = new WindowController();
+            camaraController = new CamaraController();
 
             mmiC = new MmiCommunication("localhost",8000, "User1", "GUI");
             mmiC.Message += MmiC_Message;
@@ -92,32 +94,36 @@ namespace AppGui
             var com = doc.Descendants("command").FirstOrDefault().Value;
             dynamic json = JsonConvert.DeserializeObject(com);
 
-            string target = (string)json.recognized[1].ToString();
-            if (target != "LAST")
-                last = target;
-            else
-                target = last;
+            // convert json to object
+            Command command = Newtonsoft.Json.JsonConvert.DeserializeObject<Command>(json.recognized);
 
-            switch (((string)json.recognized[0].ToString()).Trim())
+            // if the target is "LAST", then provide the last one
+            if (command.target != "LAST")
+                last = command.target;
+            else
+                command.target = last;
+
+            switch (command.target)
             {
                 case "VOLUME":
-                    soundController.Execute(new string[] { target, (string)json.recognized[2].ToString() });
+                    //camaraController.Execute(new string[] { "OPEN" });
+                    soundController.Execute(command.action, command.value);
                     break;
 
                 case "BRIGHT":
-                    brightnessController.Execute(new string[] { target, (string)json.recognized[2].ToString() });
+                    //camaraController.Execute(new string[] { "CLOSE" });
+                    brightnessController.Execute(command.action, command.value);
                     break;
 
-                case "FILE_EXPLORER":
-                    fileSystemController.Execute(new string[] { target, (string)json.recognized[2].ToString() });
-                    break;
 
-                case "MOVE":
-                    windowController.Execute(new string[] { target, (string)json.recognized[2].ToString() });
+                default:
+                    ApplicationController.Execute(command.target, command.action, command.value);
+                    //windowController.Execute(new string[] { target, (string)json.recognized[2].ToString() });
+                    //fileSystemController.Execute(command.action, command.value);
                     break;
             }
 
-            //  new 16 april 2020
+
             mmic.Send(lce.NewContextRequest());
 
             string json2 = ""; // "{ \"synthesize\": [";
