@@ -24,21 +24,25 @@ namespace AppGui
         /// <returns>
         /// True if the method was able to recognize the action; otherwise, false.
         /// </returns>
-        public bool Execute(string[] args)
+        public bool Execute(string action, string value, string[] shortcuts)
         {
-            switch (args[0])
+
+            if (action == "OPEN")
             {
-                case "OPEN":
-                    switch (args[1])
-                    {
-                        case "FILE_EXPLORER":
-                            OpenFolder();
-                            break;
-                        default:
-                            OpenFolder(paths[args[1]]);
-                            break;
-                    }
-                    return true;
+
+                if (value == "FILE_EXPLORER")
+                {
+                    OpenFolder();
+                }
+                else if (value.StartsWith("SHORTCUT_"))
+                {
+                    int shortcutIdx = int.Parse(value.Replace("SHORTCUT_", ""));
+                    OpenFolder(shortcuts[shortcutIdx - 1]);
+                } else
+                {
+                    OpenFolder(paths[value]);
+                }
+                return true;
             }
             return false;
         }

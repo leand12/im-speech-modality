@@ -36,12 +36,12 @@ namespace AppGui
         // controllers
         private SoundController soundController;
         private BrightnessController brightnessController;
+        private FileSystemController fileSystemController;
 
         public static int currentWorkspace = 0;
         public static int nWorkspaces = 1;
 
         public static List<WorkspaceController> workspaces = new List<WorkspaceController>();
-
 
         public MainWindow()
         {
@@ -49,12 +49,13 @@ namespace AppGui
 
             soundController = new SoundController();
             brightnessController = new BrightnessController();
+            fileSystemController = new FileSystemController();
             MainWindow.workspaces.Add(new WorkspaceController());
 
             mmiC = new MmiCommunication("localhost",8000, "User1", "GUI");
             mmiC.Message += MmiC_Message;
             mmiC.Start();
-
+            
 
             // NEW 16 april 2020
             //init LifeCycleEvents..
@@ -99,11 +100,14 @@ namespace AppGui
             command.Target = json.recognized.target;
             command.Action = json.recognized.action;
             command.Value = json.recognized.value;
-
+            
 
             WorkspaceController cws = MainWindow.workspaces[MainWindow.currentWorkspace];
 
-
+            Console.WriteLine(command.Target);
+            Console.WriteLine(command.Action);
+            Console.WriteLine(command.Value);
+            
             // if the target is "LAST", then provide the last one
             if (command.Target != "LAST")
                 last = command.Target;
@@ -122,14 +126,27 @@ namespace AppGui
                     brightnessController.Execute(command.Action, command.Value);
                     break;
 
+                case "FILE_EXPLORER":
+
+                    string[] shortcuts = new string[] { 
+                        shortcut1.ToString().Replace("System.Windows.Controls.TextBox: ", ""),
+                        shortcut2.ToString().Replace("System.Windows.Controls.TextBox: ", ""),
+                        shortcut3.ToString().Replace("System.Windows.Controls.TextBox: ", ""),
+                        shortcut4.ToString().Replace("System.Windows.Controls.TextBox: ", ""),
+                        shortcut5.ToString().Replace("System.Windows.Controls.TextBox: ", ""),
+                    };
+                    fileSystemController.Execute(command.Action, command.Value, shortcuts);
+                    break;
+
                 case "WORKSPACE":
                     cws.Execute(command.Action, command.Value);
                     break;
 
                 default:
-                    cws.ExecuteApp(command.Target, command.Action, command.Value);
-                    //windowController.Execute(new string[] { target, (string)json.recognized[2].ToString() });
-                    //fileSystemController.Execute(command.action, command.value);
+                    if (!cws.ExecuteApp(command.Target, command.Action, command.Value))
+                    {
+                        mmic.Send("não consigo fazer o comando");
+                    }
                     break;
             }
 

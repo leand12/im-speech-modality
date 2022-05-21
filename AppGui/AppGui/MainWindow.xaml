@@ -58,7 +58,7 @@
             FontSize="15" FontFamily="Arial"  
             FontWeight="Bold"/>
 
-        <TextBox Grid.Column="2" x:Name="shortcut1" 
+        <TextBox Grid.Column="2" x:Name="shortcut1"
                  HorizontalAlignment="Left" 
                  Height="40" Margin="10,10,0,0" 
                  TextWrapping="Wrap" Text="C:\Users\leand\Desktop\UA\4ano\IM" 
