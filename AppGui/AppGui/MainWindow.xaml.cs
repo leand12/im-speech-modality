@@ -122,7 +122,10 @@ namespace AppGui
                     break;
 
                 default:
-                    appController.Execute(command.Target, command.Action, command.Value);
+                    if (!appController.Execute(command.Target, command.Action, command.Value))
+                    {
+                        mmic.Send("não consigo fazer o comando");
+                    }
                     //windowController.Execute(new string[] { target, (string)json.recognized[2].ToString() });
                     //fileSystemController.Execute(command.action, command.value);
                     break;

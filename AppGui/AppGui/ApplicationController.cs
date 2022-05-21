@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Linq;
 using System.Collections.Generic;
+using System.Management;
 
 namespace AppGui
 {
@@ -25,10 +26,15 @@ namespace AppGui
 
         private Dictionary<string, string> names = new Dictionary<string, string>()
         {
-            { "CALC", "calculator" },
+            { "CALC", "calc.exe" },
             { "NOTEPAD", "Notepad" },
-            { "SPOTIFY", "Spotify" }
+            { "SPOTIFY", "Spotify" },
+            { "CAMERA", "microsoft.windows.camera:" }
         };
+
+        /* Applications */
+
+        private CameraProgram camera = new CameraProgram();
 
 
         /* Consts */
@@ -60,17 +66,26 @@ namespace AppGui
             switch (action)
             {
                 case "OPEN":
-                    Console.WriteLine("OPEN");
                     return Open(target);
                 case "CLOSE":
                     return Close(target);
-                case "Move":
-                    return MoveWindowTo(target, GetPosition(action));
+                case "MOVE":
+                    return MoveWindowTo(target, GetPosition(value));
                 case "MAXIMIZE":
                     return SetWindowShow(target, SW_SHOWMAXIMIZED);
                 case "MINIMIZE":
                     return SetWindowShow(target, SW_SHOWMINIMIZED);
             }
+
+            if (GetProcess(target) != null)
+            {
+                switch (target)
+                {
+                    case "CAMERA":
+                        return camera.Execute(action);
+                }
+            }
+
             return false;
         }
 
@@ -78,7 +93,12 @@ namespace AppGui
         {
             if (names.ContainsKey(target))
             {
-                apps.Add(target, Process.Start(names[target]));
+                Console.WriteLine("OPen " + target);
+                Process p = Process.Start(names[target]);
+
+                Console.WriteLine(p.ProcessName + " " + p.Id);
+
+                apps.Add(target, p);
                 return true;
             }
             return false;
@@ -88,16 +108,43 @@ namespace AppGui
         {
             if (apps.ContainsKey(target))
             {
-                apps[target].Kill();
+                KillProcessAndChildrens(apps[target].Id);
                 apps.Remove(target);
                 return true;
             } else if (target == "SELECTED")
             {
-                Process.GetCurrentProcess().Kill();
+                KillProcessAndChildrens(Process.GetCurrentProcess().Id);
                 return true;
             }
 
             return false;
+        }
+
+        private void KillProcessAndChildrens(int pid)
+        {
+            ManagementObjectSearcher processSearcher = new ManagementObjectSearcher
+              ("Select * From Win32_Process Where ParentProcessID=" + pid);
+            ManagementObjectCollection processCollection = processSearcher.Get();
+
+            try
+            {
+                Process proc = Process.GetProcessById(pid);
+                if (!proc.HasExited) proc.Kill();
+            }
+            catch (ArgumentException)
+            {
+                // Process already exited.
+            }
+
+            // kill child processes(also kills childrens of childrens etc.)
+            if (processCollection != null)
+            {
+                foreach (ManagementObject mo in processCollection)
+                {
+                    Console.WriteLine("Lá vai o filho " + Convert.ToInt32(mo["ProcessID"]));
+                    KillProcessAndChildrens(Convert.ToInt32(mo["ProcessID"])); 
+                }
+            }
         }
 
         private int GetPosition(string position)
@@ -123,6 +170,10 @@ namespace AppGui
 
         private Process GetProcess(String name)
         {
+            if (apps.ContainsKey(name))
+            {
+                return apps[name];
+            }
             switch (name)
             {
                 case "CALC":
@@ -133,8 +184,9 @@ namespace AppGui
                     return Process.GetProcessesByName("Notepad").FirstOrDefault();
                 case "SPOTIFY":
                     return Process.GetProcessesByName("Spotify").FirstOrDefault();
+                case "CAMERA":
+                    return Process.GetProcessesByName("microsoft.windows.camera:").FirstOrDefault();
             }
-            //Process process = Process.GetProcessesByName("Notepad").FirstOrDefault();
 
             return null;
         }
