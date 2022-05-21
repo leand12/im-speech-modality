@@ -1,274 +1,280 @@
 ﻿<?xml version="1.0"?>
 <grammar xml:lang="pt-PT" version="1.0" xmlns="http://www.w3.org/2001/06/grammar" tag-format="semantics/1.0">
-	<rule id="rootRule" scope="public">
-		<one-of>
-			<item>
-				<!--Action [+ Application]-->
-				<ruleref uri="#AppAction" />
-				<tag>out.action=rules.AppAction.action; out.target="LAST";  out.value=rules.AppAction.direction;</tag>
-				<item repeat="0-1">
-					<ruleref uri="#App" />
-					<tag>out.target=rules.App; </tag>
-				</item>
-			</item>
+  <rule id="rootRule" scope="public">
+    <one-of>
+      <item>
+        <!--Action [+ Application]-->
+        <ruleref uri="#AppAction" />
+        <tag>out.action=rules.AppAction.action; out.target="LAST";  out.value=rules.AppAction.direction;</tag>
+        <item repeat="0-1">
+          <ruleref uri="#App" />
+          <tag>out.target=rules.App; </tag>
+        </item>
+      </item>
 
-			<item>
-				<!--File Explorer-->
-				<ruleref uri="#FileExplorer" />
-				<tag>out.target="FILE_EXPLORER"; out.action="OPEN"; out.value=rules.FileExplorer; </tag>
-			</item>
+      <item>
+        <!--File Explorer-->
+        <ruleref uri="#FileExplorer" />
+        <tag>out.target="FILE_EXPLORER"; out.action="OPEN"; out.value=rules.FileExplorer; </tag>
+      </item>
 
-			<item>
-				<!--System Action-->
-				<ruleref uri="#SystemAction" />
-				<tag>out.target=rules.SystemAction.target; out.action=rules.SystemAction.action; out.value=rules.SystemAction.value;</tag>
-			</item>  
+      <item>
+        <!--System Action-->
+        <ruleref uri="#SystemAction" />
+        <tag>out.target=rules.SystemAction.target; out.action=rules.SystemAction.action; out.value=rules.SystemAction.value;</tag>
+      </item>
+
+      <item>
+         <!-- Workspace Action --> 
+        <ruleref uri="#WorkspaceAction" />
+        <tag>out.target="WORKSPACE";out.action=rules.WorkspaceAction.action; out.value=rules.WorkspaceAction.value;</tag>
+      </item>
         
-			<item>
-				<!--Calc-->
-				fazer contas <tag>out.action="OPEN"; out.target="CALC";</tag>
-			</item>
-			<item>
-				<!--Word-->
-				quero escrever um texto <tag>out.action="OPEN"; out.target="WORD";</tag>
-			</item>
-		</one-of>
-	</rule>
+      <item>
+        <!--Calc-->
+        fazer contas <tag>out.action="OPEN"; out.target="CALC";</tag>
+      </item>
+      <item>
+        <!--Word-->
+        quero escrever um texto <tag>out.action="OPEN"; out.target="WORD";</tag>
+      </item>
+    </one-of>
+  </rule>
 
-	<rule id="AppAction">
-		<one-of>
-			<item>
-				<!--Open Action-->
-				<ruleref uri="#OpenAppAction" />
-				<tag>out.action="OPEN"</tag>
-			</item>
+  <rule id="AppAction">
+    <one-of>
+      <item>
+        <!--Open Action-->
+        <ruleref uri="#OpenAppAction" />
+        <tag>out.action="OPEN"</tag>
+      </item>
 
-			<item>
-				<!--Close Action-->
-				<ruleref uri="#CloseAppAction" />
-				<tag>out.action="CLOSE"</tag>
-			</item>
+      <item>
+        <!--Close Action-->
+        <ruleref uri="#CloseAppAction" />
+        <tag>out.action="CLOSE"</tag>
+      </item>
 
-			<item>
-				<!--Move Action-->
-				<ruleref uri="#MoveAppAction" />
-				<tag>out.action="MOVE"; out.direction=rules.MoveAppAction</tag>
-			</item>
+      <item>
+        <!--Move Action-->
+        <ruleref uri="#MoveAppAction" />
+        <tag>out.action="MOVE"; out.direction=rules.MoveAppAction</tag>
+      </item>
 
-			<item>
-				<!--Minimize Action-->
-				<ruleref uri="#MinimizeAppAction" />
-				<tag>out.action="MINIMIZE"</tag>
-			</item>
+      <item>
+        <!--Minimize Action-->
+        <ruleref uri="#MinimizeAppAction" />
+        <tag>out.action="MINIMIZE"</tag>
+      </item>
 
-			<item>
-				<!--Maximize Action-->
-				<ruleref uri="#MaximizeAppAction" />
-				<tag>out.action="MAXIMIZE"</tag>
-			</item>
+      <item>
+        <!--Maximize Action-->
+        <ruleref uri="#MaximizeAppAction" />
+        <tag>out.action="MAXIMIZE"</tag>
+      </item>
 
-			<item>
-				<!--Show Action-->
-				<ruleref uri="#ShowAppAction" />
-				<tag>out.action="SHOW"</tag>
-			</item>
+      <item>
+        <!--Show Action-->
+        <ruleref uri="#ShowAppAction" />
+        <tag>out.action="SHOW"</tag>
+      </item>
 
-		</one-of>
-	</rule>
+    </one-of>
+  </rule>
 
-	<rule id="App">
-		<one-of>
-			<item>
-				<!--Spotify-->
-				<item repeat="0-1">o</item>
-				spotify
-				<tag>out="SPOTIFY"</tag>
-			</item>
-			<item>
-				<!--Calculadora-->
-				<item repeat="0-1">a</item>
-				calculadora
-				<tag>out="CALC"</tag>
-			</item>
-			<item>
-				<!--Notepad-->
-				<item repeat="0-1">o</item>
-				<one-of>
-					<item>notepad</item>
-					<item>bloco</item>
-					<item>texto</item>
-					<item>bloco de notas</item>
-					<item>bloco de texto</item>
-					<item>editor de texto</item>
-				</one-of>
-				<tag>out="NOTEPAD"</tag>
-			</item>
-		</one-of>
-	</rule>
+  <rule id="App">
+    <one-of>
+      <item>
+        <!--Spotify-->
+        <item repeat="0-1">o</item>
+        spotify
+        <tag>out="SPOTIFY"</tag>
+      </item>
+      <item>
+        <!--Calculadora-->
+        <item repeat="0-1">a</item>
+        calculadora
+        <tag>out="CALC"</tag>
+      </item>
+      <item>
+        <!--Notepad-->
+        <item repeat="0-1">o</item>
+        <one-of>
+          <item>notepad</item>
+          <item>bloco</item>
+          <item>texto</item>
+          <item>bloco de notas</item>
+          <item>bloco de texto</item>
+          <item>editor de texto</item>
+        </one-of>
+        <tag>out="NOTEPAD"</tag>
+      </item>
+    </one-of>
+  </rule>
 
 
 
-	<rule id="OpenAppAction">
-		<one-of>
-			<item>abrir</item>
-			<item>abre</item>
-			<item>executar</item>
-			<item>executa</item>
-			<item>inicializar</item>
-			<item>inicializa</item>
-		</one-of>
-	</rule>
+  <rule id="OpenAppAction">
+    <one-of>
+      <item>abrir</item>
+      <item>abre</item>
+      <item>executar</item>
+      <item>executa</item>
+      <item>inicializar</item>
+      <item>inicializa</item>
+    </one-of>
+  </rule>
 
-	<rule id="CloseAppAction">
-		<one-of>
-			<item>fechar</item>
-			<item>fecha</item>
-			<item>terminar</item>
-			<item>termina</item>
-		</one-of>
-	</rule>
+  <rule id="CloseAppAction">
+    <one-of>
+      <item>fechar</item>
+      <item>fecha</item>
+      <item>terminar</item>
+      <item>termina</item>
+    </one-of>
+  </rule>
 
-	<rule id="MoveAppAction">
-		<one-of>
-			<item>mover</item>
-			<item>move</item>
-			<item>meter</item>
-			<item>mete</item>
-			<item>colocar</item>
-			<item>coloca</item>
-			<item>encaixar</item>
-			<item>encaixa</item>
-		</one-of>
-		<one-of>
-			<item>
-				<ruleref uri="#HDirection" />
-				<tag>out=rules.HDirection</tag>
-				<item repeat="0-1">
-					<ruleref uri="#VDirection" />
-					<tag>out=rules.HDirection + "_" + rules.VDirection;</tag>
-				</item>
-			</item>
-			<item>
-				<ruleref uri="#VDirection" />
-				<tag>out=rules.VDirection</tag>
-				<item repeat="0-1">
-					<ruleref uri="#HDirection" />
-					<tag>out=rules.HDirection + "_" + rules.VDirection;</tag>
-				</item>
-			</item>
-		</one-of>
-	</rule>
+  <rule id="MoveAppAction">
+    <one-of>
+      <item>mover</item>
+      <item>move</item>
+      <item>meter</item>
+      <item>mete</item>
+      <item>colocar</item>
+      <item>coloca</item>
+      <item>encaixar</item>
+      <item>encaixa</item>
+    </one-of>
+    <one-of>
+      <item>
+        <ruleref uri="#HDirection" />
+        <tag>out=rules.HDirection</tag>
+        <item repeat="0-1">
+          <ruleref uri="#VDirection" />
+          <tag>out=rules.HDirection + "_" + rules.VDirection;</tag>
+        </item>
+      </item>
+      <item>
+        <ruleref uri="#VDirection" />
+        <tag>out=rules.VDirection</tag>
+        <item repeat="0-1">
+          <ruleref uri="#HDirection" />
+          <tag>out=rules.HDirection + "_" + rules.VDirection;</tag>
+        </item>
+      </item>
+    </one-of>
+  </rule>
 
-	<rule id="MinimizeAppAction">
-		<one-of>
-			<item>minimizar</item>
-			<item>minimiza</item>
-			<item>esconder</item>
-			<item>esconde</item>
-			<item>ocultar</item>
-			<item>oculta</item>
-		</one-of>
-	</rule>
+  <rule id="MinimizeAppAction">
+    <one-of>
+      <item>minimizar</item>
+      <item>minimiza</item>
+      <item>esconder</item>
+      <item>esconde</item>
+      <item>ocultar</item>
+      <item>oculta</item>
+    </one-of>
+  </rule>
 
-	<rule id="MaximizeAppAction">
-		<one-of>
-			<item>maximizar</item>
-			<item>maximiza</item>
-			<item>expandir</item>
-			<item>expande</item>
-		</one-of>
-	</rule>
+  <rule id="MaximizeAppAction">
+    <one-of>
+      <item>maximizar</item>
+      <item>maximiza</item>
+      <item>expandir</item>
+      <item>expande</item>
+    </one-of>
+  </rule>
 
-	<rule id="ShowAppAction">
-		<one-of>
-			<item>mostrar</item>
-			<item>mostra</item>
-			<item>
-				<one-of>
-					<item>trazer</item>
-					<item>traz</item>
-					<item>mover</item>
-					<item>move</item>
-					<item>meter</item>
-					<item>mete</item>
-				</one-of>
-				<one-of>
-					<item>para a</item>
-					<item>à</item>
-				</one-of>
-				frente
-			</item>
-		</one-of>
-	</rule>
+  <rule id="ShowAppAction">
+    <one-of>
+      <item>mostrar</item>
+      <item>mostra</item>
+      <item>
+        <one-of>
+          <item>trazer</item>
+          <item>traz</item>
+          <item>mover</item>
+          <item>move</item>
+          <item>meter</item>
+          <item>mete</item>
+        </one-of>
+        <one-of>
+          <item>para a</item>
+          <item>à</item>
+        </one-of>
+        frente
+      </item>
+    </one-of>
+  </rule>
 
-	<rule id="HDirection">
-		<item repeat="0-1">
-			<one-of>
-				<item>para a</item>
-				<item>à</item>
-			</one-of>
-		</item>
-		<one-of>
-			<item>
-				esquerda<tag>out="LEFT"</tag>
-			</item>
-			<item>
-				direita<tag>out="RIGHT"</tag>
-			</item>
-		</one-of>
-	</rule>
+  <rule id="HDirection">
+    <item repeat="0-1">
+      <one-of>
+        <item>para a</item>
+        <item>à</item>
+      </one-of>
+    </item>
+    <one-of>
+      <item>
+        esquerda<tag>out="LEFT"</tag>
+      </item>
+      <item>
+        direita<tag>out="RIGHT"</tag>
+      </item>
+    </one-of>
+  </rule>
 
-	<rule id="VDirection">
-		<one-of>
-			<item>
-				<item repeat="0-1">
-					<one-of>
-						<item>para</item>
-						<item>em</item>
-					</one-of>
-				</item>
-				<one-of>
-					<item>
-						cima<tag>out="UP"</tag>
-					</item>
-					<item>
-						baixo<tag>out="DOWN"</tag>
-					</item>
-				</one-of>
-			</item>
-			<item>
-				<item repeat="0-1">
-					<one-of>
-						<item>para o</item>
-						<item>no</item>
-					</one-of>
-				</item>
-				<one-of>
-					<item>
-						topo<tag>out="UP"</tag>
-					</item>
-					<item>
-						fundo<tag>out="DOWN"</tag>
-					</item>
-				</one-of>
-			</item>
-		</one-of>
-	</rule>
+  <rule id="VDirection">
+    <one-of>
+      <item>
+        <item repeat="0-1">
+          <one-of>
+            <item>para</item>
+            <item>em</item>
+          </one-of>
+        </item>
+        <one-of>
+          <item>
+            cima<tag>out="UP"</tag>
+          </item>
+          <item>
+            baixo<tag>out="DOWN"</tag>
+          </item>
+        </one-of>
+      </item>
+      <item>
+        <item repeat="0-1">
+          <one-of>
+            <item>para o</item>
+            <item>no</item>
+          </one-of>
+        </item>
+        <one-of>
+          <item>
+            topo<tag>out="UP"</tag>
+          </item>
+          <item>
+            fundo<tag>out="DOWN"</tag>
+          </item>
+        </one-of>
+      </item>
+    </one-of>
+  </rule>
   
 
   
-	<!--System Actions-->
-	
+  <!--System Actions-->
+  
   <rule	id="SystemAction">
     <one-of>
 
       <item>
         <!-- Volume or Brightness -->
         <one-of>
-					<item>aumenta  <tag>out.action="+";</tag> </item>
-					<item>aumentar <tag>out.action="+";</tag> </item>
-					<item>diminui  <tag>out.action="-";</tag> </item>
-					<item>diminuir <tag>out.action="-";</tag> </item>
+          <item>aumenta  <tag>out.action="+";</tag> </item>
+          <item>aumentar <tag>out.action="+";</tag> </item>
+          <item>diminui  <tag>out.action="-";</tag> </item>
+          <item>diminuir <tag>out.action="-";</tag> </item>
         </one-of>
 
         <one-of>
@@ -277,14 +283,14 @@
           <item>a luminosidade <tag>out.target="BRIGHT";</tag> </item>
           <item>o som					 <tag>out.target="VOLUME";</tag> </item>
           <item>o volume       <tag>out.target="VOLUME";</tag> </item>
-				</one-of>
+        </one-of>
 
-				<!--TODO: adicionar a quantidade com um item repeat 0-1 -->
-			</item>
+        <!--TODO: adicionar a quantidade com um item repeat 0-1 -->
+      </item>
 
-			<item>
-				<!-- Volume -->
-				<ruleref uri="#VolumeAction" />
+      <item>
+        <!-- Volume -->
+        <ruleref uri="#VolumeAction" />
         <tag>out.value=rules.VolumeAction.value; out.target="VOLUME"; out.action=".";</tag>
       </item>
     
@@ -294,112 +300,172 @@
   
   <rule id="VolumeAction">
     
-		<one-of>
+    <one-of>
 
-			<item>
-				<tag>out.value=0;</tag>
-				<one-of>
-					<item>
-						está muito barulho
-					</item>
-					<item>
-						silêncio
-					</item>
-				</one-of>
-			</item>
+      <item>
+        <tag>out.value=0;</tag>
+        <one-of>
+          <item>
+            está muito barulho
+          </item>
+          <item>
+            silêncio
+          </item>
+        </one-of>
+      </item>
 
-			<item>
-				<tag>out.value=100;</tag>
-				<one-of>
-					<item>
-						podes falar mais alto
-					</item>
-					<item>
-						não consigo ouvir nada
-					</item>
-				</one-of>
-			</item>
+      <item>
+        <tag>out.value=100;</tag>
+        <one-of>
+          <item>
+            podes falar mais alto
+          </item>
+          <item>
+            não consigo ouvir nada
+          </item>
+        </one-of>
+      </item>
 
-		</one-of>
-	</rule>
+    </one-of>
+  </rule>
 
-	<!-- File Explorer -->
-	<rule id="FileExplorer">
-		<example>ver fotografias</example>
-		<example>mostrar explorador de ficheiros</example>
-		<example>abrir explorador de ficheiros nas fotografias</example>
+  <!-- File Explorer -->
+  <rule id="FileExplorer">
+    <example>ver fotografias</example>
+    <example>mostrar explorador de ficheiros</example>
+    <example>abrir explorador de ficheiros nas fotografias</example>
 
-		<one-of>
-			<item>abrir</item>
-			<item>abre</item>
-			<item>mostrar</item>
-			<item>mostra</item>
-			<item>ver</item>
-		</one-of>
+    <one-of>
+      <item>abrir</item>
+      <item>abre</item>
+      <item>mostrar</item>
+      <item>mostra</item>
+      <item>ver</item>
+    </one-of>
 
-		<item repeat="0-1">
-			<item repeat="0-1">o</item>
-			explorador de ficheiros
-			<tag>out="FILE_EXPLORER"</tag>
-		</item>
+    <item repeat="0-1">
+      <item repeat="0-1">o</item>
+      explorador de ficheiros
+      <tag>out="FILE_EXPLORER"</tag>
+    </item>
 
-		<item repeat="0-1">
-			<one-of>
-				<item>
-					<one-of>
-						<item>fotografias</item>
-						<item>nas fotografias</item>
-						<item>em fotografias</item>
-					</one-of>
-					<tag>out="PICTURES"</tag>
-				</item>
+    <item repeat="0-1">
+      <one-of>
+        <item>
+          <one-of>
+            <item>fotografias</item>
+            <item>nas fotografias</item>
+            <item>em fotografias</item>
+          </one-of>
+          <tag>out="PICTURES"</tag>
+        </item>
 
-				<item>
-					<one-of>
-						<item>transferências</item>
-						<item>nas transferências</item>
-						<item>em transferências</item>
-					</one-of>
-					<tag>out="DOWNLOADS"</tag>
-				</item>
+        <item>
+          <one-of>
+            <item>transferências</item>
+            <item>nas transferências</item>
+            <item>em transferências</item>
+          </one-of>
+          <tag>out="DOWNLOADS"</tag>
+        </item>
 
-				<item>
-					<one-of>
-						<item>ambiente de trabalho</item>
-						<item>no ambiente de trabalho</item>
-						<item>em ambiente de trabalho</item>
-					</one-of>
-					<tag>out="DESKTOP"</tag>
-				</item>
+        <item>
+          <one-of>
+            <item>ambiente de trabalho</item>
+            <item>no ambiente de trabalho</item>
+            <item>em ambiente de trabalho</item>
+          </one-of>
+          <tag>out="DESKTOP"</tag>
+        </item>
 
-				<item>
-					<item>atalho</item>
-					<ruleref uri="#Number" />
-					<tag>out="SHORTCUT_" + rules.Number</tag>
-				</item>
-			</one-of>
-		</item>
-	</rule>
+        <item>
+          <item>atalho</item>
+          <ruleref uri="#Number" />
+          <tag>out="SHORTCUT_" + rules.Number</tag>
+        </item>
+      </one-of>
+    </item>
+  </rule>
 
-	<!-- Number -->
-	<rule id="Number">
-		<one-of>
-			<item>
-				um      <tag>out="1"</tag>
-			</item>
-			<item>
-				dois    <tag>out="2"</tag>
-			</item>
-			<item>
-				três    <tag>out="3"</tag>
-			</item>
-			<item>
-				quatro  <tag>out="4"</tag>
-			</item>
-			<item>
-				cinco   <tag>out="5"</tag>
-			</item>
-		</one-of>
-	</rule>
+  <!-- Number -->
+  <rule id="Number">
+    <one-of>
+      <item>
+        um      <tag>out="1"</tag>
+      </item>
+      <item>
+        dois    <tag>out="2"</tag>
+      </item>
+      <item>
+        três    <tag>out="3"</tag>
+      </item>
+      <item>
+        quatro  <tag>out="4"</tag>
+      </item>
+      <item>
+        cinco   <tag>out="5"</tag>
+      </item>
+    </one-of>
+  </rule>
+
+  <!-- Workspace -->
+  <rule id="WorkspaceAction">
+
+    <one-of>
+      <item>
+        <one-of>
+          <item>criar</item>
+          <item>adicionar</item>
+        </one-of>
+
+        <item repeat="0-1">novo</item>
+
+        <ruleref uri="#AuxWorkspace" />
+
+        <tag>out.action="CREATE";</tag>
+      </item>
+
+      <item>
+        <one-of>
+          <item>ir para</item>
+          <item>mover para</item>
+        </one-of>
+
+        <one-of>
+          <item>
+            o próximo
+            <ruleref uri="#AuxWorkspace" />
+            <tag>out.value="NEXT";</tag>
+          </item>
+
+          <item>
+            o 
+            <ruleref uri="#AuxWorkspace" />
+            anterior
+            <tag>out.value="PREV";</tag>
+          </item>
+        </one-of>
+        <tag>out.action="MOVE";</tag>
+      </item>
+
+      <item>
+        <one-of>
+          <item>remover</item>
+          <item>apagar</item>
+        </one-of>
+
+        <ruleref uri="#AuxWorkspace" />
+        <tag>out.action="DELETE";</tag>
+      </item>
+    </one-of>
+    
+  </rule>
+
+  <rule id="AuxWorkspace">
+    <one-of>
+      <item>ambiente de trabalho</item>
+      <item>área de trabalho</item>
+    </one-of>
+  </rule>
 
 </grammar>

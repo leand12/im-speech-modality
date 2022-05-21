@@ -37,6 +37,7 @@ namespace AppGui
         private SoundController soundController;
         private BrightnessController brightnessController;
         private ApplicationController appController;
+        private WorkspaceController workspaceController;
 
         public MainWindow()
         {
@@ -45,6 +46,7 @@ namespace AppGui
             soundController = new SoundController();
             brightnessController = new BrightnessController();
             appController = new ApplicationController();
+            workspaceController = new WorkspaceController();
 
             mmiC = new MmiCommunication("localhost",8000, "User1", "GUI");
             mmiC.Message += MmiC_Message;
@@ -115,6 +117,9 @@ namespace AppGui
                     brightnessController.Execute(command.Action, command.Value);
                     break;
 
+                case "WORKSPACE":
+                    workspaceController.Execute(command.Action, command.Value);
+                    break;
 
                 default:
                     appController.Execute(command.Target, command.Action, command.Value);
