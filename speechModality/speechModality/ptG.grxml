@@ -5,7 +5,7 @@
       <item>
         <!--Action [+ Application]-->
         <ruleref uri="#AppAction" />
-        <tag>out.action=rules.AppAction.action; out.target="LAST";  out.value=rules.AppAction.direction;</tag>
+        <tag>out.action=rules.AppAction.action; out.target="SELECTED";  out.value=rules.AppAction.direction;</tag>
         <item repeat="0-1">
           <ruleref uri="#App" />
           <tag>out.target=rules.App; </tag>
@@ -23,6 +23,12 @@
         <ruleref uri="#SystemAction" />
         <tag>out.target=rules.SystemAction.target; out.action=rules.SystemAction.action; out.value=rules.SystemAction.value;</tag>
       </item>
+
+	    <item>
+		    <!--Camera Action-->
+		    <ruleref uri="#CameraAction" />
+		    <tag>out.target="CAMERA"; out.action=rules.CameraAction</tag>
+	    </item>
 
       <item>
          <!-- Workspace Action --> 
@@ -119,6 +125,12 @@
         calculadora
         <tag>out="CALC"</tag>
       </item>
+        <item>
+            <!--Camera-->
+            <item repeat="0-1">a</item>
+            câmara
+            <tag>out="CAMERA"</tag>
+        </item>
       <item>
         <!--Notepad-->
         <item repeat="0-1">o</item>
@@ -351,6 +363,21 @@
 
     </one-of>
   </rule>
+
+
+<rule id="CameraAction">
+	<item>
+		<one-of>
+			<item>tirar</item>
+			<item>tira</item>
+		</one-of>
+		<one-of>
+			<item>uma foto</item>
+			<item>foto</item>
+		</one-of>
+		<tag>out="PHOTO"</tag>
+	</item>
+</rule>
 
   <!-- File Explorer -->
   <rule id="FileExplorer">
