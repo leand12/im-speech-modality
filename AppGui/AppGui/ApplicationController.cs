@@ -29,7 +29,10 @@ namespace AppGui
 
         [DllImport("user32.dll")]
         static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-        
+     
+
+        [DllImport("user32")]
+        private static extern bool SetForegroundWindow(IntPtr hwnd);
 
         private Dictionary<string, ProgramInfo> apps = new Dictionary<string, ProgramInfo>()
         {
@@ -43,6 +46,8 @@ namespace AppGui
 
         private const int SW_SHOWMAXIMIZED = 3;
         private const int SW_SHOWMINIMIZED = 6;
+        private const int SW_RESTORE = 9;
+
 
         private const int SWP_NOSIZE = 0x0001;
         private const int SWP_NOZORDER = 0x0004;
@@ -77,6 +82,8 @@ namespace AppGui
                     return SetWindowShow(target, SW_SHOWMAXIMIZED);
                 case "MINIMIZE":
                     return SetWindowShow(target, SW_SHOWMINIMIZED);
+                case "SHOW":
+                    return Show(target);
             }
 
             if (apps.ContainsKey(target))
@@ -86,6 +93,15 @@ namespace AppGui
             }
 
             return false;
+        }
+
+        private bool CloseAll()
+        {
+            foreach (Process process in GetProgramProcesses())
+            {
+                process.Kill();
+            }
+            return true;
         }
 
         private bool Open(string target)
@@ -100,21 +116,38 @@ namespace AppGui
 
         private bool Close(string target)
         {
+            if (target == "ALL")
+                return CloseAll();
+
             if (!apps.ContainsKey(target) && apps[target].killAll)
             {
-                foreach (var p in Process.GetProcessesByName(target))
-                    p.Kill();
+                foreach (var p2 in Process.GetProcessesByName(target))
+                {
+                    p2.Kill();
+
+                }
                 return true;
             }
 
             Process p = GetProcess(target);
-
             if (p != null)
             {
                 p.Kill();
                 return true;
             }
             return false;
+        }
+
+        private bool Show(string target)
+        {
+            Process process = GetProcess(target);
+            if (process == null)
+                return false;
+
+            ShowWindow(process.MainWindowHandle, SW_RESTORE);
+            SetForegroundWindow(process.MainWindowHandle);
+
+            return true;
         }
 
         private int GetPosition(string position)
@@ -151,6 +184,13 @@ namespace AppGui
             return Process.GetProcessesByName(apps[target].killName).FirstOrDefault();
         }
 
+        private Process[] GetProgramProcesses()
+        {
+            return Process.GetProcesses()
+                .Where(p => (long)p.MainWindowHandle != 0)
+                .ToArray();
+        }
+
         private bool MoveWindowTo(string target, int position)
         {
             Process process = GetProcess(target);
@@ -183,7 +223,6 @@ namespace AppGui
                 x = width;
             }
 
-
             IntPtr handle = process.MainWindowHandle;
             Console.WriteLine(process.ProcessName + " " + process.Id + " " + process.MachineName);
             if (handle != IntPtr.Zero)
@@ -201,6 +240,13 @@ namespace AppGui
             if (p != null)
             {
                 ShowWindow(p.MainWindowHandle, value);
+                return true;
+            } else if (target == "ALL" && value == SW_SHOWMINIMIZED)
+            {
+                foreach (Process process in GetProgramProcesses())
+                {
+                    ShowWindow(process.MainWindowHandle, value);
+                }
                 return true;
             }
             return false;

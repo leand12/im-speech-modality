@@ -36,19 +36,37 @@
         <tag>out.target="WORKSPACE";out.action=rules.WorkspaceAction.action; out.value=rules.WorkspaceAction.value;</tag>
       </item>
 
-	    <item>
-		    <item repeat="0-1">quero</item>
-			<one-of>
-                <item>
-                    <!--Calc-->
-                    fazer contas <tag>out.action="OPEN"; out.target="CALC";</tag>
-                 </item>
-                  <item>
-                    <!--Word-->
-                    escrever um texto <tag>out.action="OPEN"; out.target="WORD";</tag>
-                </item>
-			</one-of>
-		</item>
+      <item>
+        <!-- Minimize/Close All-->
+        <one-of>
+          <item>
+            <ruleref uri="#MinimizeAppAction" />
+            <tag>out.action="MINIMIZE";</tag>
+          </item>
+        
+          <item>
+            <ruleref uri="#CloseAppAction" />
+            <tag>out.action="CLOSE";</tag>
+          </item>
+        </one-of>
+
+        <one-of>
+          <item>todas as aplicações</item>
+          <item>tudo</item>
+          <item>todas as janelas</item>
+          <item>todos os programas</item>
+        </one-of>
+        <tag>out.target="ALL"; out.value="";</tag>
+      </item>
+        
+      <item>
+        <!--Calc-->
+        fazer contas <tag>out.action="OPEN"; out.target="CALC";</tag>
+      </item>
+      <item>
+        <!--Word-->
+        quero escrever um texto <tag>out.action="OPEN"; out.target="WORD";</tag>
+      </item>
     </one-of>
   </rule>
 

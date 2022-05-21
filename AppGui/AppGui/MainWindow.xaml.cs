@@ -13,7 +13,7 @@ using System.Windows.Interop;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Windows.Forms;
-
+using System.Collections.Generic;
 
 namespace AppGui
 {
@@ -36,8 +36,12 @@ namespace AppGui
         // controllers
         private SoundController soundController;
         private BrightnessController brightnessController;
-        private ApplicationController appController;
-        private WorkspaceController workspaceController;
+
+        public static int currentWorkspace = 0;
+        public static int nWorkspaces = 1;
+
+        public static List<WorkspaceController> workspaces = new List<WorkspaceController>();
+
 
         public MainWindow()
         {
@@ -45,8 +49,7 @@ namespace AppGui
 
             soundController = new SoundController();
             brightnessController = new BrightnessController();
-            appController = new ApplicationController();
-            workspaceController = new WorkspaceController();
+            MainWindow.workspaces.Add(new WorkspaceController());
 
             mmiC = new MmiCommunication("localhost",8000, "User1", "GUI");
             mmiC.Message += MmiC_Message;
@@ -97,7 +100,9 @@ namespace AppGui
             command.Action = json.recognized.action;
             command.Value = json.recognized.value;
 
-            //Console.WriteLine(command.action);
+
+            WorkspaceController cws = MainWindow.workspaces[MainWindow.currentWorkspace];
+
 
             // if the target is "LAST", then provide the last one
             if (command.Target != "LAST")
@@ -118,14 +123,11 @@ namespace AppGui
                     break;
 
                 case "WORKSPACE":
-                    workspaceController.Execute(command.Action, command.Value);
+                    cws.Execute(command.Action, command.Value);
                     break;
 
                 default:
-                    if (!appController.Execute(command.Target, command.Action, command.Value))
-                    {
-                        mmic.Send("não consigo fazer o comando");
-                    }
+                    cws.ExecuteApp(command.Target, command.Action, command.Value);
                     //windowController.Execute(new string[] { target, (string)json.recognized[2].ToString() });
                     //fileSystemController.Execute(command.action, command.value);
                     break;
@@ -150,56 +152,6 @@ namespace AppGui
             mmic.Send(exNot);
 
 
-        }
-
-        [DllImport("user32.dll", SetLastError = true)]
-        static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, int uFlags);
-
-        private const int SWP_NOSIZE = 0x0001;
-        private const int SWP_NOZORDER = 0x0004;
-        private const int SWP_SHOWWINDOW = 0x0040;
-
-        private const int WP_UP = 0b0001;
-        private const int WP_DOWN = 0b0010;
-        private const int WP_LEFT = 0b0100;
-        private const int WP_RIGHT = 0b1000;
-
-        private void MoveWindowTo(int position)
-        {
-            System.Drawing.Rectangle area = Screen.PrimaryScreen.WorkingArea;
-            int x = 0;
-            int y = 0;
-            int height = area.Height;
-            int width = area.Width;
-
-            if ((position & WP_UP) > 0)
-            {
-                height /= 2;
-            }
-            else if ((position & WP_DOWN) > 0)
-            {
-                height /= 2;
-                y = height;
-            }
-            if ((position & WP_LEFT) > 0)
-            {
-                width /= 2;
-            }
-            else if ((position & WP_RIGHT) > 0)
-            {
-                width /= 2;
-                x = width;
-            }
-
-            Process process = Process.GetProcessesByName("Notepad").FirstOrDefault();
-
-            IntPtr handle = process.MainWindowHandle;
-            Console.WriteLine(process.ProcessName + " " + process.Id + " " + process.MachineName);
-            if (handle != IntPtr.Zero)
-            {
-                Console.WriteLine("ok");
-                SetWindowPos(handle, IntPtr.Zero, x, y, width, height, SWP_NOZORDER | SWP_SHOWWINDOW);
-            }
         }
     }
 }
