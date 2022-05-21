@@ -37,6 +37,18 @@
       </item>
 
       <item>
+        <!-- Websites -->
+        <ruleref uri="#OpenAppAction" />
+        <tag>out.action="OPEN"; out.value="";</tag>
+        <one-of>
+          <item>facebook<tag>out.target="FACEBOOK";</tag></item>
+          <item>youtube<tag>out.target="YOUTUBE";</tag></item>
+          <item>elearning<tag>out.target="ELEARNING";</tag></item>
+          <item>github<tag>out.target="GITHUB";</tag></item>
+      </one-of>
+      </item>
+
+      <item>
         <!-- Minimize/Close All-->
         <one-of>
           <item>
@@ -60,13 +72,62 @@
       </item>
         
       <item>
-        <!--Calc-->
-        fazer contas <tag>out.action="OPEN"; out.target="CALC";</tag>
+        <!-- Calc -->
+        fazer contas <tag>out.action="OPEN"; out.target="CALC"; out.value="";</tag>
       </item>
       <item>
-        <!--Word-->
-        quero escrever um texto <tag>out.action="OPEN"; out.target="WORD";</tag>
+        <!-- Word -->
+        quero escrever um texto <tag>out.action="OPEN"; out.target="WORD"; out.value="";</tag>
       </item>
+
+      <item>
+        <!-- Youtube -->
+        <tag>out.action="OPEN"; out.target="YOUTUBE"; out.value="";</tag>
+        <one-of>
+          <item>quero ver um video</item>
+          <item>quero ver videos</item>
+        </one-of>
+      </item>
+
+      <item>
+        <!-- Github -->
+        <tag>out.action="OPEN"; out.target="GITHUB"; out.value="";</tag>
+        <one-of>
+          <item>mostra-me os meus repositórios</item>
+          <item>quero ver as atualizações do projeto</item>
+        </one-of>
+      </item>
+  
+      <item>
+        <!-- Facebook -->
+        <tag>out.action="OPEN"; out.target="FACEBOOK"; out.value="";</tag>
+        <one-of>
+          <item>quero procurar uma pessoa</item>
+          <item>mostra-me o que os outros andam a fazer</item>
+        </one-of>
+      </item>
+    
+      <item>
+        <!-- Elearning -->
+        <tag>out.action="OPEN"; out.target="ELEARNING"; out.value="";</tag>
+        <one-of>
+          <item>vai à pagina da universidade</item>
+          <item>será que já saiu as notas</item>
+          <item>até quando é que é para entregar isto</item>
+          <item>mostra-me os slides</item>
+        </one-of>
+      </item>  
+      
+      <item>
+        <!-- Camera -->
+        <tag>out.action="OPEN"; out.target="CAMERA"; out.value="";</tag>
+        <one-of>
+          <item>deixa-me tirar uma foto</item>
+        </one-of>
+      </item>
+      
+      
+  
     </one-of>
   </rule>
 
