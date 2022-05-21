@@ -64,7 +64,7 @@ namespace AppGui
                     Arguments = folderPath,
                     FileName = "explorer.exe"
                 };
-                Process.Start(startInfo);
+                Process p = Process.Start(startInfo);
             }   
             else
             {

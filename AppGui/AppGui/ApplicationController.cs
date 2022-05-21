@@ -11,8 +11,17 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Management;
 
+
 namespace AppGui
 {
+    struct ProgramInfo
+    {
+        public string execName;
+        public string killName;
+        public bool killAll;
+        public Program program;
+    }
+
     class ApplicationController
     {
         [DllImport("user32.dll", SetLastError = true)]
@@ -22,20 +31,13 @@ namespace AppGui
         static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
         
 
-        private Dictionary<string, Process> apps = new Dictionary<string, Process>();
-
-        private Dictionary<string, string> names = new Dictionary<string, string>()
+        private Dictionary<string, ProgramInfo> apps = new Dictionary<string, ProgramInfo>()
         {
-            { "CALC", "calc.exe" },
-            { "NOTEPAD", "Notepad" },
-            { "SPOTIFY", "Spotify" },
-            { "CAMERA", "microsoft.windows.camera:" }
+            { "CALC", new ProgramInfo() { execName = "calc", killName = "CalculatorApp", killAll = false } },
+            { "NOTEPAD", new ProgramInfo() { execName =  "Notepad", killName = "Notepad", killAll = false } },
+            { "SPOTIFY", new ProgramInfo() { execName = "Spotify", killName = "Spotify", killAll = true } },
+            { "CAMERA", new ProgramInfo() { execName = "microsoft.windows.camera:", killName = "WindowsCamera", killAll = false, program = new CameraProgram() } },
         };
-
-        /* Applications */
-
-        private CameraProgram camera = new CameraProgram();
-
 
         /* Consts */
 
@@ -77,13 +79,10 @@ namespace AppGui
                     return SetWindowShow(target, SW_SHOWMINIMIZED);
             }
 
-            if (GetProcess(target) != null)
+            if (apps.ContainsKey(target))
             {
-                switch (target)
-                {
-                    case "CAMERA":
-                        return camera.Execute(action);
-                }
+                Program p = apps[target].program;
+                if (p == null) return p.Execute(action);
             }
 
             return false;
@@ -91,14 +90,9 @@ namespace AppGui
 
         private bool Open(string target)
         {
-            if (names.ContainsKey(target))
+            if (apps.ContainsKey(target))
             {
-                Console.WriteLine("OPen " + target);
-                Process p = Process.Start(names[target]);
-
-                Console.WriteLine(p.ProcessName + " " + p.Id);
-
-                apps.Add(target, p);
+                Process p = Process.Start(apps[target].execName);
                 return true;
             }
             return false;
@@ -106,45 +100,21 @@ namespace AppGui
 
         private bool Close(string target)
         {
-            if (apps.ContainsKey(target))
+            if (!apps.ContainsKey(target) && apps[target].killAll)
             {
-                KillProcessAndChildrens(apps[target].Id);
-                apps.Remove(target);
-                return true;
-            } else if (target == "SELECTED")
-            {
-                KillProcessAndChildrens(Process.GetCurrentProcess().Id);
+                foreach (var p in Process.GetProcessesByName(target))
+                    p.Kill();
                 return true;
             }
 
+            Process p = GetProcess(target);
+
+            if (p != null)
+            {
+                p.Kill();
+                return true;
+            }
             return false;
-        }
-
-        private void KillProcessAndChildrens(int pid)
-        {
-            ManagementObjectSearcher processSearcher = new ManagementObjectSearcher
-              ("Select * From Win32_Process Where ParentProcessID=" + pid);
-            ManagementObjectCollection processCollection = processSearcher.Get();
-
-            try
-            {
-                Process proc = Process.GetProcessById(pid);
-                if (!proc.HasExited) proc.Kill();
-            }
-            catch (ArgumentException)
-            {
-                // Process already exited.
-            }
-
-            // kill child processes(also kills childrens of childrens etc.)
-            if (processCollection != null)
-            {
-                foreach (ManagementObject mo in processCollection)
-                {
-                    Console.WriteLine("Lá vai o filho " + Convert.ToInt32(mo["ProcessID"]));
-                    KillProcessAndChildrens(Convert.ToInt32(mo["ProcessID"])); 
-                }
-            }
         }
 
         private int GetPosition(string position)
@@ -168,40 +138,22 @@ namespace AppGui
 
         }
 
-        private Process GetProcess(String name)
+        private Process GetProcess(String target)
         {
-            if (apps.ContainsKey(name))
+            if (target == "SELECTED")
             {
-                return apps[name];
+                return Process.GetCurrentProcess();
             }
-            switch (name)
+            if (!apps.ContainsKey(target))
             {
-                case "CALC":
-                    return Process.GetProcessesByName("calculator").FirstOrDefault();
-                case "FILE_EXPLORER":
-                    return Process.GetProcessesByName("file_explorer").FirstOrDefault();
-                case "NOTEPAD":
-                    return Process.GetProcessesByName("Notepad").FirstOrDefault();
-                case "SPOTIFY":
-                    return Process.GetProcessesByName("Spotify").FirstOrDefault();
-                case "CAMERA":
-                    return Process.GetProcessesByName("microsoft.windows.camera:").FirstOrDefault();
+                return null;
             }
-
-            return null;
+            return Process.GetProcessesByName(apps[target].killName).FirstOrDefault();
         }
 
         private bool MoveWindowTo(string target, int position)
         {
-            Process process = null;
-            if (apps.ContainsKey(target))
-            {
-                process = apps[target];
-            }
-            else if (target == "SELECTED")
-            {
-                process = Process.GetCurrentProcess();
-            }
+            Process process = GetProcess(target);
 
             if (process == null)
                 return false;
@@ -245,16 +197,12 @@ namespace AppGui
 
         private bool SetWindowShow(string target, int value)
         {
-            if (apps.ContainsKey(target))
+            Process p = GetProcess(target);
+            if (p != null)
             {
-                ShowWindow(apps[target].MainWindowHandle, value);
-                return true;
-            } else if (target == "SELECTED")
-            {
-                ShowWindow(Process.GetCurrentProcess().MainWindowHandle, value);
+                ShowWindow(p.MainWindowHandle, value);
                 return true;
             }
-
             return false;
         }
     }
