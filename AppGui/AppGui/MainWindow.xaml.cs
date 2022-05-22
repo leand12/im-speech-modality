@@ -14,6 +14,7 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using System.Windows.Threading;
 
 namespace AppGui
 {
@@ -27,8 +28,9 @@ namespace AppGui
 
         //  new 16 april 2020
         private MmiCommunication mmiSender;
-        private LifeCycleEvents lce;
-        private MmiCommunication mmic;
+        // LifeCycleEvents(string source, string target, string id, string medium, string mode;
+        private static LifeCycleEvents lce = new LifeCycleEvents("APP", "TTS", "User1", "na", "command"); 
+        private static MmiCommunication mmic = new MmiCommunication("localhost", 8000, "User1", "GUI");
 
 
         private string last = "";
@@ -36,7 +38,9 @@ namespace AppGui
         // controllers
         private SoundController soundController;
         private BrightnessController brightnessController;
-        private FileSystemController fileSystemController;
+        private FileExplorerController fileExplorerController;
+        private TerminalController terminalController;
+        private VSCodeController vsCodeController;
 
         public static int currentWorkspace = 0;
         public static int nWorkspaces = 1;
@@ -49,24 +53,18 @@ namespace AppGui
 
             soundController = new SoundController();
             brightnessController = new BrightnessController();
-            fileSystemController = new FileSystemController();
-            MainWindow.workspaces.Add(new WorkspaceController());
+            fileExplorerController = new FileExplorerController();
+            terminalController = new TerminalController();
+            vsCodeController = new VSCodeController();
+            workspaces.Add(new WorkspaceController());
 
-            mmiC = new MmiCommunication("localhost",8000, "User1", "GUI");
+            mmiC = new MmiCommunication("localhost", 8000, "User1", "GUI");
             mmiC.Message += MmiC_Message;
             mmiC.Start();
-            
-
-            // NEW 16 april 2020
-            //init LifeCycleEvents..
-            lce = new LifeCycleEvents("APP", "TTS", "User1", "na", "command"); // LifeCycleEvents(string source, string target, string id, string medium, string mode
-            // MmiCommunication(string IMhost, int portIM, string UserOD, string thisModalityName)
-            mmic = new MmiCommunication("localhost", 8000, "User1", "GUI");
-            
-
+           
         }
 
-        private String getFile(Int32 handle)
+        private string getFile(Int32 handle)
         {
             return "";
         }
@@ -87,6 +85,17 @@ namespace AppGui
             GenericAll = DesktopReadobjects | DesktopCreatewindow | DesktopCreatemenu |
                          DesktopHookcontrol | DesktopJournalrecord | DesktopJournalplayback |
                          DesktopEnumerate | DesktopWriteobjects | DesktopSwitchdesktop
+        }
+
+        private string[] GetShortcuts()
+        {
+            return new string[] {
+                shortcut1.ToString().Replace("System.Windows.Controls.TextBox", "").Replace(": ", ""),
+                shortcut2.ToString().Replace("System.Windows.Controls.TextBox", "").Replace(": ", ""),
+                shortcut3.ToString().Replace("System.Windows.Controls.TextBox", "").Replace(": ", ""),
+                shortcut4.ToString().Replace("System.Windows.Controls.TextBox", "").Replace(": ", ""),
+                shortcut5.ToString().Replace("System.Windows.Controls.TextBox", "").Replace(": ", ""),
+            };
         }
 
         private void MmiC_Message(object sender, MmiEventArgs e)
@@ -127,15 +136,15 @@ namespace AppGui
                     break;
 
                 case "FILE_EXPLORER":
+                    fileExplorerController.Execute(command.Action, command.Value, GetShortcuts());
+                    break;
 
-                    string[] shortcuts = new string[] { 
-                        shortcut1.ToString().Replace("System.Windows.Controls.TextBox: ", ""),
-                        shortcut2.ToString().Replace("System.Windows.Controls.TextBox: ", ""),
-                        shortcut3.ToString().Replace("System.Windows.Controls.TextBox: ", ""),
-                        shortcut4.ToString().Replace("System.Windows.Controls.TextBox: ", ""),
-                        shortcut5.ToString().Replace("System.Windows.Controls.TextBox: ", ""),
-                    };
-                    fileSystemController.Execute(command.Action, command.Value, shortcuts);
+                case "TERMINAL":
+                    terminalController.Execute(command.Action, command.Value, GetShortcuts());
+                    break;
+
+                case "VSCODE":
+                    vsCodeController.Execute(command.Action, command.Value, GetShortcuts());
                     break;
 
                 case "WORKSPACE":
@@ -145,30 +154,19 @@ namespace AppGui
                 default:
                     if (!cws.ExecuteApp(command.Target, command.Action, command.Value))
                     {
-                        mmic.Send("não consigo fazer o comando");
+                        Send("não consigo fazer o comando");
                     }
                     break;
             }
 
-
             mmic.Send(lce.NewContextRequest());
+        }
 
-            string json2 = ""; // "{ \"synthesize\": [";
-            json2 += (string)json.recognized[0].ToString()+ " ";
-            json2 += (string)json.recognized[1].ToString() + " DONE." ;
-            //json2 += "] }";
-            /*
-             foreach (var resultSemantic in e.Result.Semantics)
-            {
-                json += "\"" + resultSemantic.Value.Value + "\", ";
-            }
-            json = json.Substring(0, json.Length - 2);
-            json += "] }";
-            */
-            var exNot = lce.ExtensionNotification(0 + "", 0 + "", 1, json2);
+
+        public static void Send(string text)
+        { 
+            var exNot = lce.ExtensionNotification(0 + "", 0 + "", 1, text);
             mmic.Send(exNot);
-
-
         }
     }
 }

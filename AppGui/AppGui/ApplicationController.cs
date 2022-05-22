@@ -93,7 +93,7 @@ namespace AppGui
             if (apps.ContainsKey(target))
             {
                 Program p = apps[target].program;
-                if (p == null) return p.Execute(action);
+                if (p != null) return p.Execute(action);
             }
 
             return false;

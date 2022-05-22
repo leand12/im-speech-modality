@@ -25,9 +25,6 @@ namespace AppGui
                 case "-":
                     Set(Get() - 10);
                     break;
-                case ".":
-                    // TODO: n sei se isto vai existir
-                    break;
                 default:
                     return false;
             }
