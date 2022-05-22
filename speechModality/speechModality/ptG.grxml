@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0"?>
 <grammar xml:lang="pt-PT" version="1.0" xmlns="http://www.w3.org/2001/06/grammar" tag-format="semantics/1.0">
   <rule id="rootRule" scope="public">
+	  <item>Bitor</item>
     <one-of>
       <item>
         <!--Action [+ Application]-->
