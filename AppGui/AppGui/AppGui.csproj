@@ -73,11 +73,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="FileExplorerController.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="CameraProgram.cs" />
     <Compile Include="Command.cs" />
-    <Compile Include="FileSystemController.cs" />
     <Compile Include="SoundController.cs" />
+    <Compile Include="TerminalController.cs" />
+    <Compile Include="VSCodeController.cs" />
     <Compile Include="WorkspaceController.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

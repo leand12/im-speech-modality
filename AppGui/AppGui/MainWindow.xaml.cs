@@ -14,6 +14,7 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using System.Windows.Threading;
 
 namespace AppGui
 {
@@ -36,7 +37,9 @@ namespace AppGui
         // controllers
         private SoundController soundController;
         private BrightnessController brightnessController;
-        private FileSystemController fileSystemController;
+        private FileExplorerController fileExplorerController;
+        private TerminalController terminalController;
+        private VSCodeController vsCodeController;
 
         public static int currentWorkspace = 0;
         public static int nWorkspaces = 1;
@@ -49,7 +52,9 @@ namespace AppGui
 
             soundController = new SoundController();
             brightnessController = new BrightnessController();
-            fileSystemController = new FileSystemController();
+            fileExplorerController = new FileExplorerController();
+            terminalController = new TerminalController();
+            vsCodeController = new VSCodeController();
             MainWindow.workspaces.Add(new WorkspaceController());
 
             mmiC = new MmiCommunication("localhost",8000, "User1", "GUI");
@@ -89,6 +94,17 @@ namespace AppGui
                          DesktopEnumerate | DesktopWriteobjects | DesktopSwitchdesktop
         }
 
+        private string[] GetShortcuts()
+        {
+            return new string[] {
+                shortcut1.ToString().Replace("System.Windows.Controls.TextBox: ", ""),
+                shortcut2.ToString().Replace("System.Windows.Controls.TextBox: ", ""),
+                shortcut3.ToString().Replace("System.Windows.Controls.TextBox: ", ""),
+                shortcut4.ToString().Replace("System.Windows.Controls.TextBox: ", ""),
+                shortcut5.ToString().Replace("System.Windows.Controls.TextBox: ", ""),
+            };
+        }
+
         private void MmiC_Message(object sender, MmiEventArgs e)
         {
             var doc = XDocument.Parse(e.Message);
@@ -104,7 +120,7 @@ namespace AppGui
 
             WorkspaceController cws = MainWindow.workspaces[MainWindow.currentWorkspace];
 
-            Console.WriteLine(command.Target);
+        Console.WriteLine(command.Target);
             Console.WriteLine(command.Action);
             Console.WriteLine(command.Value);
             
@@ -127,15 +143,15 @@ namespace AppGui
                     break;
 
                 case "FILE_EXPLORER":
+                    fileExplorerController.Execute(command.Action, command.Value, GetShortcuts());
+                    break;
 
-                    string[] shortcuts = new string[] { 
-                        shortcut1.ToString().Replace("System.Windows.Controls.TextBox: ", ""),
-                        shortcut2.ToString().Replace("System.Windows.Controls.TextBox: ", ""),
-                        shortcut3.ToString().Replace("System.Windows.Controls.TextBox: ", ""),
-                        shortcut4.ToString().Replace("System.Windows.Controls.TextBox: ", ""),
-                        shortcut5.ToString().Replace("System.Windows.Controls.TextBox: ", ""),
-                    };
-                    fileSystemController.Execute(command.Action, command.Value, shortcuts);
+                case "TERMINAL":
+                    terminalController.Execute(command.Action, command.Value, GetShortcuts());
+                    break;
+
+                case "VSCODE":
+                    vsCodeController.Execute(command.Action, command.Value, GetShortcuts());
                     break;
 
                 case "WORKSPACE":

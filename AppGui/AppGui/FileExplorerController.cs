@@ -7,7 +7,7 @@ using System.IO;
 
 namespace AppGui
 {
-    class FileSystemController
+    class FileExplorerController
     {
 
         private Dictionary<string, string> paths = new Dictionary<string, string>()
@@ -38,7 +38,8 @@ namespace AppGui
                 {
                     int shortcutIdx = int.Parse(value.Replace("SHORTCUT_", ""));
                     OpenFolder(shortcuts[shortcutIdx - 1]);
-                } else
+                } 
+                else
                 {
                     OpenFolder(paths[value]);
                 }
