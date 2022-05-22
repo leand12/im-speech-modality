@@ -28,8 +28,9 @@ namespace AppGui
 
         //  new 16 april 2020
         private MmiCommunication mmiSender;
-        private LifeCycleEvents lce;
-        private MmiCommunication mmic;
+        // LifeCycleEvents(string source, string target, string id, string medium, string mode;
+        private static LifeCycleEvents lce = new LifeCycleEvents("APP", "TTS", "User1", "na", "command"); 
+        private static MmiCommunication mmic = new MmiCommunication("localhost", 8000, "User1", "GUI");
 
 
         private string last = "";
@@ -55,23 +56,15 @@ namespace AppGui
             fileExplorerController = new FileExplorerController();
             terminalController = new TerminalController();
             vsCodeController = new VSCodeController();
-            MainWindow.workspaces.Add(new WorkspaceController());
+            workspaces.Add(new WorkspaceController());
 
             mmiC = new MmiCommunication("localhost", 8000, "User1", "GUI");
             mmiC.Message += MmiC_Message;
             mmiC.Start();
-            
-
-            // NEW 16 april 2020
-            //init LifeCycleEvents..
-            lce = new LifeCycleEvents("APP", "TTS", "User1", "na", "command"); // LifeCycleEvents(string source, string target, string id, string medium, string mode
-            // MmiCommunication(string IMhost, int portIM, string UserOD, string thisModalityName)
-            mmic = new MmiCommunication("localhost", 8000, "User1", "GUI");
-            
-
+           
         }
 
-        private String getFile(Int32 handle)
+        private string getFile(Int32 handle)
         {
             return "";
         }
@@ -120,7 +113,7 @@ namespace AppGui
 
             WorkspaceController cws = MainWindow.workspaces[MainWindow.currentWorkspace];
 
-        Console.WriteLine(command.Target);
+            Console.WriteLine(command.Target);
             Console.WriteLine(command.Action);
             Console.WriteLine(command.Value);
             
@@ -161,11 +154,10 @@ namespace AppGui
                 default:
                     if (!cws.ExecuteApp(command.Target, command.Action, command.Value))
                     {
-                        mmic.Send("não consigo fazer o comando");
+                        Send("não consigo fazer o comando");
                     }
                     break;
             }
-
 
             mmic.Send(lce.NewContextRequest());
 
@@ -181,10 +173,14 @@ namespace AppGui
             json = json.Substring(0, json.Length - 2);
             json += "] }";
             */
-            var exNot = lce.ExtensionNotification(0 + "", 0 + "", 1, json2);
+            Send("ola");
+        }
+
+
+        public static void Send(string text)
+        { 
+            var exNot = lce.ExtensionNotification(0 + "", 0 + "", 1, text);
             mmic.Send(exNot);
-
-
         }
     }
 }
