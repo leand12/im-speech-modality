@@ -39,6 +39,10 @@ namespace AppGui
             { "CALC", new ProgramInfo() { execName = "calc", killName = "CalculatorApp", killAll = false } },
             { "NOTEPAD", new ProgramInfo() { execName =  "Notepad", killName = "Notepad", killAll = false } },
             { "SPOTIFY", new ProgramInfo() { execName = "Spotify", killName = "Spotify", killAll = true } },
+            { "FACEBOOK", new ProgramInfo() { execName = "www.facebook.com", killName = "Spotify", killAll = true } },
+            { "GITHUB", new ProgramInfo() { execName = "www.github.com", killName = "Spotify", killAll = true } },
+            { "ELEARNING", new ProgramInfo() { execName = "http://elearning.ua.pt", killName = "Spotify", killAll = true } },
+            { "YOUTUBE", new ProgramInfo() { execName = "www.youtube.com", killName = "Spotify", killAll = true } },
             { "CAMERA", new ProgramInfo() { execName = "microsoft.windows.camera:", killName = "WindowsCamera", killAll = false, program = new CameraProgram() } },
         };
 
