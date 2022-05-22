@@ -57,7 +57,7 @@ namespace AppGui
             vsCodeController = new VSCodeController();
             MainWindow.workspaces.Add(new WorkspaceController());
 
-            mmiC = new MmiCommunication("localhost",8000, "User1", "GUI");
+            mmiC = new MmiCommunication("localhost", 8000, "User1", "GUI");
             mmiC.Message += MmiC_Message;
             mmiC.Start();
             

@@ -10,6 +10,8 @@ namespace AppGui
 {
     internal class TerminalController
     {
+        private int lastProcId = 0;
+
         public bool Execute(string action, string value, string[] shortcuts)
         {
             if (action == "OPEN")
@@ -25,6 +27,13 @@ namespace AppGui
                     Open();
                     return true;
                 }
+            }
+            else if (action == "CLOSE")
+            {
+                if (lastProcId != 0) Process.GetProcessById(lastProcId).Kill();
+                else Process.GetProcessesByName("cmd").FirstOrDefault().Kill();
+                lastProcId = 0;
+                return true;
             }
             return false;
         }
@@ -51,6 +60,7 @@ namespace AppGui
                 cmd.StartInfo.WorkingDirectory = path;
                 cmd.StartInfo.UseShellExecute = true;
                 cmd.Start();
+                lastProcId = cmd.Id;
             }
             else
             {

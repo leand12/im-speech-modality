@@ -28,8 +28,11 @@ namespace AppGui
             }
             else if (action == "CLOSE")
             {
-                Process proc = Process.GetProcessesByName("Code").FirstOrDefault();
-                proc.Kill();
+                Process[] processes = Process.GetProcessesByName("Code");
+                foreach (Process proc in processes)
+                {
+                    proc.Kill();
+                }
             }
             return false;
         }
