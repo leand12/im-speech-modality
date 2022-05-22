@@ -1,148 +1,159 @@
 ﻿<?xml version="1.0"?>
 <grammar xml:lang="pt-PT" version="1.0" xmlns="http://www.w3.org/2001/06/grammar" tag-format="semantics/1.0">
   <rule id="rootRule" scope="public">
-	  <item>Bitor</item>
-    <one-of>
-      <item>
-        <!--Action [+ Application]-->
-        <ruleref uri="#AppAction" />
-        <tag>out.action=rules.AppAction.action; out.target="SELECTED";  out.value=rules.AppAction.direction;</tag>
-        <item repeat="0-1">
-          <ruleref uri="#App" />
-          <tag>out.target=rules.App; </tag>
-        </item>
-      </item>
+	  <one-of>
+		  <item>
+	            <item>Bitor</item>
+                <one-of>
+                  <item>
+                    <!--Action [+ Application]-->
+                    <ruleref uri="#AppAction" />
+                    <tag>out.action=rules.AppAction.action; out.target="SELECTED";  out.value=rules.AppAction.direction;</tag>
+                    <item repeat="0-1">
+                      <ruleref uri="#App" />
+                      <tag>out.target=rules.App; </tag>
+                    </item>
+                  </item>
 
-      <item>
-        <!--File Explorer-->
-        <ruleref uri="#FileExplorer" />
-        <tag>out.target="FILE_EXPLORER"; out.action="OPEN"; out.value=rules.FileExplorer; </tag>
-      </item>
+                  <item>
+                    <!--File Explorer-->
+                    <ruleref uri="#FileExplorer" />
+                    <tag>out.target="FILE_EXPLORER"; out.action="OPEN"; out.value=rules.FileExplorer; </tag>
+                  </item>
 
 
-		<item>
-			<!--Terminal-->
-			<ruleref uri="#TerminalAction" />
-			<tag>out.target="TERMINAL"; out.action=rules.TerminalAction.action; out.value=rules.TerminalAction.value; </tag>
-		</item>
+		            <item>
+			            <!--Terminal-->
+			            <ruleref uri="#TerminalAction" />
+			            <tag>out.target="TERMINAL"; out.action=rules.TerminalAction.action; out.value=rules.TerminalAction.value; </tag>
+		            </item>
 
-		<item>
-			<!--VSCode-->
-			<ruleref uri="#VSCodeAction" />
-			<tag>out.target="VSCODE"; out.action=rules.VSCodeAction.action; out.value=rules.VSCodeAction.value; </tag>
-		</item>
+		            <item>
+			            <!--VSCode-->
+			            <ruleref uri="#VSCodeAction" />
+			            <tag>out.target="VSCODE"; out.action=rules.VSCodeAction.action; out.value=rules.VSCodeAction.value; </tag>
+		            </item>
 
-      <item>
-        <!--System Action-->
-        <ruleref uri="#SystemAction" />
-        <tag>out.target=rules.SystemAction.target; out.action=rules.SystemAction.action; out.value=rules.SystemAction.value;</tag>
-      </item>
+                  <item>
+                    <!--System Action-->
+                    <ruleref uri="#SystemAction" />
+                    <tag>out.target=rules.SystemAction.target; out.action=rules.SystemAction.action; out.value=rules.SystemAction.value;</tag>
+                  </item>
 
-	    <item>
-		    <!--Camera Action-->
-		    <ruleref uri="#CameraAction" />
-		    <tag>out.target="CAMERA"; out.action=rules.CameraAction</tag>
-	    </item>
+	                <item>
+		                <!--Camera Action-->
+		                <ruleref uri="#CameraAction" />
+		                <tag>out.target="CAMERA"; out.action=rules.CameraAction</tag>
+	                </item>
 
-      <item>
-         <!-- Workspace Action --> 
-        <ruleref uri="#WorkspaceAction" />
-        <tag>out.target="WORKSPACE";out.action=rules.WorkspaceAction.action; out.value=rules.WorkspaceAction.value;</tag>
-      </item>
+                  <item>
+                     <!-- Workspace Action --> 
+                    <ruleref uri="#WorkspaceAction" />
+                    <tag>out.target="WORKSPACE";out.action=rules.WorkspaceAction.action; out.value=rules.WorkspaceAction.value;</tag>
+                  </item>
 
-      <item>
-        <!-- Websites -->
-        <ruleref uri="#OpenAppAction" />
-        <tag>out.action="OPEN"; out.value="";</tag>
-        <one-of>
-          <item>facebook<tag>out.target="FACEBOOK";</tag></item>
-          <item>youtube<tag>out.target="YOUTUBE";</tag></item>
-          <item>elearning<tag>out.target="ELEARNING";</tag></item>
-          <item>github<tag>out.target="GITHUB";</tag></item>
-      </one-of>
-      </item>
+                  <item>
+                    <!-- Websites -->
+                    <ruleref uri="#OpenAppAction" />
+                    <tag>out.action="OPEN"; out.value="";</tag>
+                    <one-of>
+                      <item>facebook<tag>out.target="FACEBOOK";</tag></item>
+                      <item>youtube<tag>out.target="YOUTUBE";</tag></item>
+                      <item>elearning<tag>out.target="ELEARNING";</tag></item>
+                      <item>github<tag>out.target="GITHUB";</tag></item>
+                  </one-of>
+                  </item>
 
-      <item>
-        <!-- Minimize/Close All-->
-        <one-of>
-          <item>
-            <ruleref uri="#MinimizeAppAction" />
-            <tag>out.action="MINIMIZE";</tag>
-          </item>
+                  <item>
+                    <!-- Minimize/Close All-->
+                    <one-of>
+                      <item>
+                        <ruleref uri="#MinimizeAppAction" />
+                        <tag>out.action="MINIMIZE";</tag>
+                      </item>
         
-          <item>
-            <ruleref uri="#CloseAppAction" />
-            <tag>out.action="CLOSE";</tag>
-          </item>
-        </one-of>
+                      <item>
+                        <ruleref uri="#CloseAppAction" />
+                        <tag>out.action="CLOSE";</tag>
+                      </item>
+                    </one-of>
 
-        <one-of>
-          <item>todas as aplicações</item>
-          <item>tudo</item>
-          <item>todas as janelas</item>
-          <item>todos os programas</item>
-        </one-of>
-        <tag>out.target="ALL"; out.value="";</tag>
-      </item>
+                    <one-of>
+                      <item>todas as aplicações</item>
+                      <item>tudo</item>
+                      <item>todas as janelas</item>
+                      <item>todos os programas</item>
+                    </one-of>
+                    <tag>out.target="ALL"; out.value="";</tag>
+                  </item>
         
-      <item>
-        <!-- Calc -->
-        fazer contas <tag>out.action="OPEN"; out.target="CALC"; out.value="";</tag>
-      </item>
-      <item>
-        <!-- Word -->
-        quero escrever um texto <tag>out.action="OPEN"; out.target="WORD"; out.value="";</tag>
-      </item>
+                  <item>
+                    <!-- Calc -->
+                    fazer contas <tag>out.action="OPEN"; out.target="CALC"; out.value="";</tag>
+                  </item>
+                  <item>
+                    <!-- Word -->
+                    quero escrever um texto <tag>out.action="OPEN"; out.target="WORD"; out.value="";</tag>
+                  </item>
 
-      <item>
-        <!-- Youtube -->
-        <tag>out.action="OPEN"; out.target="YOUTUBE"; out.value="";</tag>
-        <one-of>
-          <item>quero ver um video</item>
-          <item>quero ver videos</item>
-        </one-of>
-      </item>
+                  <item>
+                    <!-- Youtube -->
+                    <tag>out.action="OPEN"; out.target="YOUTUBE"; out.value="";</tag>
+                    <one-of>
+                      <item>quero ver um video</item>
+                      <item>quero ver videos</item>
+                    </one-of>
+                  </item>
 
-      <item>
-        <!-- Github -->
-        <tag>out.action="OPEN"; out.target="GITHUB"; out.value="";</tag>
-        <one-of>
-          <item>mostra-me os meus repositórios</item>
-          <item>quero ver as atualizações do projeto</item>
-        </one-of>
-      </item>
+                  <item>
+                    <!-- Github -->
+                    <tag>out.action="OPEN"; out.target="GITHUB"; out.value="";</tag>
+                    <one-of>
+                      <item>mostra-me os meus repositórios</item>
+                      <item>quero ver as atualizações do projeto</item>
+                    </one-of>
+                  </item>
   
-      <item>
-        <!-- Facebook -->
-        <tag>out.action="OPEN"; out.target="FACEBOOK"; out.value="";</tag>
-        <one-of>
-          <item>quero procurar uma pessoa</item>
-          <item>mostra-me o que os outros andam a fazer</item>
-        </one-of>
-      </item>
+                  <item>
+                    <!-- Facebook -->
+                    <tag>out.action="OPEN"; out.target="FACEBOOK"; out.value="";</tag>
+                    <one-of>
+                      <item>quero procurar uma pessoa</item>
+                      <item>mostra-me o que os outros andam a fazer</item>
+                    </one-of>
+                  </item>
     
-      <item>
-        <!-- Elearning -->
-        <tag>out.action="OPEN"; out.target="ELEARNING"; out.value="";</tag>
-        <one-of>
-          <item>vai à pagina da universidade</item>
-          <item>será que já saiu as notas</item>
-          <item>até quando é que é para entregar isto</item>
-          <item>mostra-me os slides</item>
-        </one-of>
-      </item>  
+                  <item>
+                    <!-- Elearning -->
+                    <tag>out.action="OPEN"; out.target="ELEARNING"; out.value="";</tag>
+                    <one-of>
+                      <item>vai à pagina da universidade</item>
+                      <item>será que já saiu as notas</item>
+                      <item>até quando é que é para entregar isto</item>
+                      <item>mostra-me os slides</item>
+                    </one-of>
+                  </item>  
       
-      <item>
-        <!-- Camera -->
-        <tag>out.action="OPEN"; out.target="CAMERA"; out.value="";</tag>
-        <one-of>
-          <item>deixa-me tirar uma foto</item>
-        </one-of>
-      </item>
+                  <item>
+                    <!-- Camera -->
+                    <tag>out.action="OPEN"; out.target="CAMERA"; out.value="";</tag>
+                    <one-of>
+                      <item>deixa-me tirar uma foto</item>
+                    </one-of>
+                  </item>
       
       
   
-    </one-of>
+                </one-of>
+		    </item>
+		    <item>
+				<item repeat="0-1">Bitor</item>
+				<one-of>
+					<item>sim<tag>out.response="YES"</tag></item>
+				    <item>nao<tag>out.response="NO"</tag></item>
+				</one-of>
+			</item>
+        </one-of>
   </rule>
 
   <rule id="AppAction">

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -17,8 +18,14 @@ namespace AppGui
                 if (value.StartsWith("SHORTCUT_"))
                 {
                     int shortcutIdx = int.Parse(value.Replace("SHORTCUT_", ""));
-                    Open(shortcuts[shortcutIdx - 1]);
-                    return true;
+                    string path = shortcuts[shortcutIdx - 1];
+                    if (Directory.Exists(path))
+                    {
+                        Open(path);
+                        return true;
+                    }
+                    MainWindow.Send("O caminho para o atalho não é válido.");
+                    return false;
                 }
                 else if (value == "VSCODE")
                 {
@@ -33,6 +40,13 @@ namespace AppGui
                 {
                     proc.Kill();
                 }
+                //foreach (Process proc in Process.GetProcesses())
+                //{
+                //    if (proc.MainWindowHandle != IntPtr.Zero && proc.MainWindowTitle == @"C:\WINDOWS\system32\cmd.exe")
+                //    {
+                //        proc.Kill();
+                //    }
+                //}
             }
             return false;
         }

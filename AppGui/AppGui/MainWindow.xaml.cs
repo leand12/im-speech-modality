@@ -90,11 +90,11 @@ namespace AppGui
         private string[] GetShortcuts()
         {
             return new string[] {
-                shortcut1.ToString().Replace("System.Windows.Controls.TextBox: ", ""),
-                shortcut2.ToString().Replace("System.Windows.Controls.TextBox: ", ""),
-                shortcut3.ToString().Replace("System.Windows.Controls.TextBox: ", ""),
-                shortcut4.ToString().Replace("System.Windows.Controls.TextBox: ", ""),
-                shortcut5.ToString().Replace("System.Windows.Controls.TextBox: ", ""),
+                shortcut1.ToString().Replace("System.Windows.Controls.TextBox", "").Replace(": ", ""),
+                shortcut2.ToString().Replace("System.Windows.Controls.TextBox", "").Replace(": ", ""),
+                shortcut3.ToString().Replace("System.Windows.Controls.TextBox", "").Replace(": ", ""),
+                shortcut4.ToString().Replace("System.Windows.Controls.TextBox", "").Replace(": ", ""),
+                shortcut5.ToString().Replace("System.Windows.Controls.TextBox", "").Replace(": ", ""),
             };
         }
 
@@ -160,20 +160,6 @@ namespace AppGui
             }
 
             mmic.Send(lce.NewContextRequest());
-
-            string json2 = ""; // "{ \"synthesize\": [";
-            json2 += (string)json.recognized[0].ToString()+ " ";
-            json2 += (string)json.recognized[1].ToString() + " DONE." ;
-            //json2 += "] }";
-            /*
-             foreach (var resultSemantic in e.Result.Semantics)
-            {
-                json += "\"" + resultSemantic.Value.Value + "\", ";
-            }
-            json = json.Substring(0, json.Length - 2);
-            json += "] }";
-            */
-            Send("ola");
         }
 
 

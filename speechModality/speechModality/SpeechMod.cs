@@ -16,7 +16,7 @@ namespace speechModality
         private static SpeechRecognitionEngine sre = new SpeechRecognitionEngine(new System.Globalization.CultureInfo("pt-PT"));
         private Grammar gr;
 
-
+        private SpeechRecognizedEventArgs lastEvent;
         public event EventHandler<SpeechEventArg> Recognized;
         protected virtual void onRecognized(SpeechEventArg msg)
         {
@@ -77,9 +77,24 @@ namespace speechModality
             onRecognized(new SpeechEventArg() { Text = e.Result.Text, Confidence = e.Result.Confidence, Out = _out, Final = false });
         }
 
-        //
+
         private void Sre_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
         {
+            if (e.Result.Confidence < 0.3)
+                return;
+
+            bool allowDangerousAction = false;
+            if (CheckAfirmativeResponse(e.Result.Semantics))
+            {
+                if (e.Result.Confidence < 0.9)
+                {
+                    tts.Speak("Poderia repetir?");
+                    return;
+                }
+                e = lastEvent;
+                allowDangerousAction = true;
+            }
+
             var _out = "";
             foreach (var resultSemantic in e.Result.Semantics)
             {
@@ -89,12 +104,18 @@ namespace speechModality
             // skip when not enough confidence
             if (e.Result.Confidence < 0.6)
             {
-                tts.Speak("Não oubi.");
+                tts.Speak("Poderia repetir?");
+                return;
+            }
+            if (!allowDangerousAction && CheckDangerousAction(e.Result.Semantics))
+            {
+                tts.Speak("Tem a certeza?");
+                lastEvent = e;
                 return;
             }
 
             onRecognized(new SpeechEventArg() { Text = e.Result.Text, Confidence = e.Result.Confidence, Out = _out, Final = true });
-            
+
             //SEND
             // IMPORTANT TO KEEP THE FORMAT {"recognized":["SHAPE","COLOR"]}
             string json = "{ \"recognized\": {";
@@ -114,9 +135,25 @@ namespace speechModality
         //  NEW 16 April 2020   - create receiver, answer to messages received
         //  Adapted from AppGUI code
 
+        private bool CheckDangerousAction(SemanticValue semantics)
+        {
+            foreach (var resultSemantic in semantics)
+            {
+                if (resultSemantic.Key == "action" && "" + resultSemantic.Value.Value == "CLOSE")
+                    return true;
+            }
+            return false;
+        }
 
-
-
+        private bool CheckAfirmativeResponse(SemanticValue semantics)
+        {
+            foreach (var resultSemantic in semantics)
+            {
+                if (resultSemantic.Key == "response" && "" + resultSemantic.Value.Value == "YES")
+                    return true;
+            }
+            return false;
+        }
 
 
         //MmiReceived_Message;

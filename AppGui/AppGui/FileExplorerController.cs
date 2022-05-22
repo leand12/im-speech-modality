@@ -73,7 +73,7 @@ namespace AppGui
             }   
             else
             {
-                Console.WriteLine(string.Format("{0} Directory does not exist!", folderPath));
+                MainWindow.Send("O caminho para o atalho não é válido.");
             }
         }
     }
