@@ -17,18 +17,19 @@
         <ruleref uri="#FileExplorer" />
         <tag>out.target="FILE_EXPLORER"; out.action="OPEN"; out.value=rules.FileExplorer; </tag>
       </item>
-		
+
+
 		<item>
-            <!--Terminal-->
-            <ruleref uri="#Terminal" />
-            <tag>out.target="TERMINAL"; out.action="OPEN"; out.value=rules.Terminal; </tag>
-        </item>   
-		
-	    <item>
-            <!--VSCode-->
-            <ruleref uri="#VSCode" />
-            <tag>out.target="VSCODE"; out.action="OPEN"; out.value=rules.VSCode; </tag>
-        </item>
+			<!--Terminal-->
+			<ruleref uri="#TerminalAction" />
+			<tag>out.target="TERMINAL"; out.action=rules.TerminalAction.action; out.value=rules.TerminalAction.value; </tag>
+		</item>
+
+		<item>
+			<!--VSCode-->
+			<ruleref uri="#VSCodeAction" />
+			<tag>out.target="VSCODE"; out.action=rules.VSCodeAction.action; out.value=rules.VSCodeAction.value; </tag>
+		</item>
 
       <item>
         <!--System Action-->
@@ -438,73 +439,113 @@
   </rule>
 
 
-<rule id="CameraAction">
-	<item>
-		<one-of>
-			<item>tirar</item>
-			<item>tira</item>
-		</one-of>
-		<one-of>
-			<item>uma foto</item>
-			<item>foto</item>
-		</one-of>
-		<tag>out="PHOTO"</tag>
-	</item>
-</rule>
+    <rule id="CameraAction">
+	    <item>
+		    <one-of>
+			    <item>tirar</item>
+			    <item>tira</item>
+		    </one-of>
+		    <one-of>
+			    <item>uma foto</item>
+			    <item>foto</item>
+		    </one-of>
+		    <tag>out="PHOTO"</tag>
+	    </item>
+    </rule>
 	
 	
     <!-- Terminal -->
-  <rule id="Terminal">
-    <example>abrir terminal</example>
-    <example>abrir terminal no atalho 1</example>
+	<rule id="TerminalAction">
+		<example>abrir terminal</example>
+		<example>abrir terminal no atalho 1</example>
+		<example>fechar terminal</example>
 
-    <one-of>
-      <item>abrir</item>
-      <item>abre</item>
-    </one-of>
+		<one-of>
+		    <item>
+		        <one-of>
+			        <item>abrir</item>
+			        <item>abre</item>
+		        </one-of>
 
-	<item repeat="0-1">
-		o
-	</item>
-	<one-of>
-		<item>terminal</item>
-	    <item>powershell</item>
-	    <item>windows powershell</item>
-	</one-of>
-    <tag>out="TERMINAL"</tag>
+		        <item repeat="0-1">
+			        o
+		        </item>
+		        <one-of>
+			        <item>terminal</item>
+			        <item>powershell</item>
+			        <item>windows powershell</item>
+		        </one-of>
+		        <tag>out.action="OPEN"; out.value="TERMINAL"</tag>
 
-    <item repeat="0-1">
-        <item>no atalho</item>
-        <ruleref uri="#Number" />
-        <tag>out="SHORTCUT_" + rules.Number</tag>
-    </item>
-  </rule>
+		        <item repeat="0-1">
+			        <item>no atalho</item>
+			        <ruleref uri="#Number" />
+			        <tag>out.value="SHORTCUT_" + rules.Number</tag>
+		        </item>
+		    </item>
+
+		    <item>
+			    <one-of>
+				    <item>fechar</item>
+				    <item>fecha</item>
+			    </one-of>
+			    <item repeat="0-1">
+				    o
+			    </item>
+				<one-of>
+					<item>terminal</item>
+					<item>powershell</item>
+					<item>windows powershell</item>
+				</one-of>
+			    <tag>out.action="CLOSE"</tag>
+		    </item>
+		</one-of>
+	</rule>
 	
 	
 	<!-- VSCode -->
-  <rule id="VSCode">
+  <rule id="VSCodeAction">
     <example>abrir visual studio code</example>
     <example>abre vs code no atalho 1</example>
+	<example>fechar vs code </example>
 
-    <one-of>
-      <item>abrir</item>
-      <item>abre</item>
-    </one-of>
-
-	<item repeat="0-1">
-		o
-	</item>
 	<one-of>
-		<item>visual studio code</item>
-	    <item>vs code</item>
-	</one-of>
-    <tag>out="VSCODE"</tag>
+		<item>
+            <one-of>
+              <item>abrir</item>
+              <item>abre</item>
+            </one-of>
 
-    <item repeat="0-1">
-        <item>no atalho</item>
-        <ruleref uri="#Number" />
-        <tag>out="SHORTCUT_" + rules.Number</tag>
-    </item>
+	        <item repeat="0-1">
+		        o
+	        </item>
+	        <one-of>
+		        <item>visual studio code</item>
+	            <item>vs code</item>
+	        </one-of>
+            <tag>out.action="OPEN"; out.value="VSCODE"</tag>
+
+            <item repeat="0-1">
+                <item>no atalho</item>
+                <ruleref uri="#Number" />
+                <tag>out.value="SHORTCUT_" + rules.Number</tag>
+            </item>
+		</item>
+		<item>
+			<one-of>
+				<item>fechar</item>
+				<item>fecha</item>
+			</one-of>
+			<item repeat="0-1">
+				o
+			</item>
+			<one-of>
+				<item>visual studio code</item>
+				<item>vs code</item>
+			</one-of>
+			<tag>out.action="CLOSE"</tag>
+		</item>
+	</one-of>
   </rule>
 
   <!-- File Explorer -->
