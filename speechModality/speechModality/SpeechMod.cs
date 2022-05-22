@@ -84,11 +84,11 @@ namespace speechModality
                 return;
 
             bool allowDangerousAction = false;
-            if (CheckAfirmativeResponse(e.Result.Semantics))
+            if (lastEvent != null && CheckAfirmativeResponse(e.Result.Semantics))
             {
                 if (e.Result.Confidence < 0.9)
                 {
-                    tts.Speak("Poderia repetir?");
+                    tts.Speak("Repita, por favor.");
                     return;
                 }
                 e = lastEvent;
@@ -104,7 +104,7 @@ namespace speechModality
             // skip when not enough confidence
             if (e.Result.Confidence < 0.6)
             {
-                tts.Speak("Poderia repetir?");
+                tts.Speak("Repita, por favor.");
                 return;
             }
             if (!allowDangerousAction && CheckDangerousAction(e.Result.Semantics))
