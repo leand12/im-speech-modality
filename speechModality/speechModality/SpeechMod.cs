@@ -55,7 +55,7 @@ namespace speechModality
             sre.SpeechHypothesized += Sre_SpeechHypothesized;
 
             // NEW - TTS support 16 April
-            tts.Speak("Ola eu sou o Bitor.");
+            tts.Speak("Ola eu sou o Bitór.");
 
 
             //  o TTS  no final indica que se recebe mensagens enviadas para TTS
