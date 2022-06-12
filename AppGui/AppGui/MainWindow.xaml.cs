@@ -15,6 +15,8 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Windows.Threading;
+using WindowsInput;
+using WindowsInput.Native;
 
 namespace AppGui
 {
@@ -98,25 +100,92 @@ namespace AppGui
             };
         }
 
+        // TODO: move this elsewhere
+        private InputSimulator input = new InputSimulator();
+
         private void MmiC_Message(object sender, MmiEventArgs e)
         {
             var doc = XDocument.Parse(e.Message);
             var com = doc.Descendants("command").FirstOrDefault().Value;
             dynamic json = JsonConvert.DeserializeObject(com);
 
+
             // convert json to object
             Command command = new Command();
-            command.Target = json.recognized.target;
-            command.Action = json.recognized.action;
-            command.Value = json.recognized.value;
-            
 
-            WorkspaceController cws = MainWindow.workspaces[MainWindow.currentWorkspace];
+            if (json.recognized is Newtonsoft.Json.Linq.JArray)
+            {
+                string semantic = json.recognized[1];
+                Console.WriteLine(semantic);
+                switch (semantic)
+                {
+                    case "ChangeSL":
+                        input.Keyboard.KeyPress(VirtualKeyCode.LEFT);
+                        break;
+
+                    case "ChangeSR":
+                        input.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
+                        break;
+
+                    case "ChangeVD":
+                        command.Target = "VOLUME";
+                        command.Action = "-";
+                        break;
+
+                    case "ChangeVU":
+                        command.Target = "VOLUME";
+                        command.Action = "+";
+                        break;
+
+                    case "ChangeWL":
+                        command.Target = "WORKSPACE";
+                        command.Action = "MOVE";
+                        command.Value = "NEXT";
+                        break;
+
+                    case "ChangeWR":
+                        command.Target = "WORKSPACE";
+                        command.Action = "MOVE";
+                        command.Value = "PREV";
+                        break;
+
+                    case "MoveAAL":
+                        command.Target = "NOTEPAD";
+                        command.Action = "MOVE";
+                        command.Value = "LEFT";
+                        break;
+
+                    case "MoveAAR":
+                        command.Target = "NOTEPAD";
+                        command.Action = "MOVE";
+                        command.Value = "RIGHT";
+                        break;
+
+                    case "MoveAD":
+                        command.Target = "NOTEPAD";
+                        command.Action = "MOVE";
+                        command.Value = "DOWN";
+                        break;
+
+                    case "MoveAU":
+                        command.Target = "NOTEPAD";
+                        command.Action = "MOVE";
+                        command.Value = "UP";
+                        break;
+                }
+            } else
+            {
+                command.Target = json.recognized.target;
+                command.Action = json.recognized.action;
+                command.Value = json.recognized.value;
+            }
 
             Console.WriteLine(command.Target);
             Console.WriteLine(command.Action);
             Console.WriteLine(command.Value);
-            
+
+            WorkspaceController cws = MainWindow.workspaces[MainWindow.currentWorkspace];
+
             // if the target is "LAST", then provide the last one
             if (command.Target != "LAST")
                 last = command.Target;
