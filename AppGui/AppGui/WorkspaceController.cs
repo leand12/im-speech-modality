@@ -61,14 +61,23 @@ namespace AppGui
             if (value == "NEXT")
             {
                 if (MainWindow.currentWorkspace + 1 == MainWindow.nWorkspaces)
-                    return false;
-                inputSimulator.Keyboard.ModifiedKeyStroke(new[] { VirtualKeyCode.LWIN, VirtualKeyCode.CONTROL }, VirtualKeyCode.RIGHT);
-                MainWindow.currentWorkspace += 1;
+                {
+                    Create();
+                }
+                else
+                {
+                    MainWindow.currentWorkspace += 1;
+                    inputSimulator.Keyboard.ModifiedKeyStroke(new[] { VirtualKeyCode.LWIN, VirtualKeyCode.CONTROL }, VirtualKeyCode.RIGHT);
+                }
             }
             else if (value == "PREV")
             {
                 if (MainWindow.currentWorkspace < 1)
+                {
+                    Console.Error.WriteLine("Cannot go to previous workspace");
                     return false;
+                }
+                Console.WriteLine("coiso");
                 inputSimulator.Keyboard.ModifiedKeyStroke(new[] { VirtualKeyCode.LWIN, VirtualKeyCode.CONTROL }, VirtualKeyCode.LEFT);
                 MainWindow.currentWorkspace -= 1;
             }
