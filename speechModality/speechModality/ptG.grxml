@@ -92,8 +92,8 @@
                     fazer contas <tag>out.action="OPEN"; out.target="CALC"; out.value="";</tag>
                   </item>
                   <item>
-                    <!-- Word -->
-                    quero escrever um texto <tag>out.action="OPEN"; out.target="WORD"; out.value="";</tag>
+                    <!-- Notepad -->
+                    quero escrever um texto <tag>out.action="OPEN"; out.target="NOTEPAD"; out.value="";</tag>
                   </item>
 
                   <item>
