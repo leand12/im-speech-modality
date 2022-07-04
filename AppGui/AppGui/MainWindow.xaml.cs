@@ -106,13 +106,18 @@ namespace AppGui
         private void MmiC_Message(object sender, MmiEventArgs e)
         {
             var doc = XDocument.Parse(e.Message);
+
+            Console.WriteLine(doc);
+
             var com = doc.Descendants("command").FirstOrDefault().Value;
             dynamic json = JsonConvert.DeserializeObject(com);
 
+            Console.WriteLine(json);
 
             // convert json to object
             Command command = new Command();
 
+            /*
             if (json.recognized is Newtonsoft.Json.Linq.JArray)
             {
                 string semantic = json.recognized[1];
@@ -173,11 +178,16 @@ namespace AppGui
                         command.Value = "UP";
                         break;
                 }
-            } else
+            }
+            */
+            var array = json.recognized.ToObject<string[]>();
+            for (int i = 0; i < array.Length - 1; i+=2)
             {
-                command.Target = json.recognized.target;
-                command.Action = json.recognized.action;
-                command.Value = json.recognized.value;
+                string key = array[i];
+                string value = array[i + 1];
+                if (key == "target") { command.Target = value; }
+                else if (key == "action") { command.Action = value; }
+                else if (key == "value" ) { command.Value = value; }
             }
 
             Console.WriteLine(command.Target);

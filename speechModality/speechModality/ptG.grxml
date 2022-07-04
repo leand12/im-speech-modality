@@ -3,8 +3,11 @@
   <rule id="rootRule" scope="public">
 	  <one-of>
 		  <item>
-	            <item>Bitor</item>
                 <one-of>
+				  <item>
+				    <ruleref uri="#App" />
+					  <tag>out.target=rules.App; out.action=""; out.value="";</tag>
+				  </item>
                   <item>
                     <!--Action [+ Application]-->
                     <ruleref uri="#AppAction" />

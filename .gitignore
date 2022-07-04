@@ -1,3 +1,8 @@
 **/Debug/*
 
 **/.vs/*
+/IM_Project3-main/IM_Project3-main/FusionCreator-for-DEMO/GenFusionSCXML/build/
+/IM_Project3-main/IM_Project3-main/FusionCreator-for-DEMO/GenFusionSCXML/dist/
+/IM_Project3-main/IM_Project3-main/FusionCreator-for-DEMO/GenFusionSCXML/nbproject/private/
+*.zip
+*.rar

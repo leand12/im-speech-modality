@@ -38,8 +38,8 @@ namespace speechModality
         {
             //init LifeCycleEvents..
             lce = new LifeCycleEvents("ASR", "FUSION", "speech-1", "acoustic", "command"); // LifeCycleEvents(string source, string target, string id, string medium, string mode)
-            //mmic = new MmiCommunication("localhost",9876,"User1", "ASR");  //PORT TO FUSION - uncomment this line to work with fusion later
-            mmic = new MmiCommunication("localhost", 8000, "User1", "ASR"); // MmiCommunication(string IMhost, int portIM, string UserOD, string thisModalityName)
+            mmic = new MmiCommunication("localhost",9876,"User1", "ASR");  //PORT TO FUSION - uncomment this line to work with fusion later
+            //mmic = new MmiCommunication("localhost", 8000, "User1", "ASR"); // MmiCommunication(string IMhost, int portIM, string UserOD, string thisModalityName)
 
             mmic.Send(lce.NewContextRequest());
 
@@ -118,13 +118,13 @@ namespace speechModality
 
             //SEND
             // IMPORTANT TO KEEP THE FORMAT {"recognized":["SHAPE","COLOR"]}
-            string json = "{ \"recognized\": {";
+            string json = "{ \"recognized\": [";
             foreach (var resultSemantic in e.Result.Semantics)
             {
-                json += "\"" + resultSemantic.Key + "\": \"" + resultSemantic.Value.Value + "\", ";
+                json += "\"" + resultSemantic.Key + "\", \"" + resultSemantic.Value.Value + "\", ";
             }
             json = json.Substring(0, json.Length - 2);
-            json += "} }";
+            json += "] }";
             Console.WriteLine(json);  
 
             var exNot = lce.ExtensionNotification(e.Result.Audio.StartTime + "", e.Result.Audio.StartTime.Add(e.Result.Audio.Duration) + "", e.Result.Confidence, json);
