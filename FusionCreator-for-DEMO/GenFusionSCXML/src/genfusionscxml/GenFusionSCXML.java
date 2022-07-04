@@ -33,15 +33,34 @@ public class GenFusionSCXML {
         fg.Redundancy(Speech.VOLUME_DOWN, SecondMod.CHANGE_VD, Output.CHANGE_VD);
         fg.Redundancy(Speech.VOLUME_UP, SecondMod.CHANGE_VU, Output.CHANGE_VU);
 
-
         // Workspace
         fg.Redundancy(Speech.WORKSPACE_PREV, SecondMod.CHANGE_WL, Output.WORKSPACE_PREV);
         fg.Redundancy(Speech.WORKSPACE_NEXT, SecondMod.CHANGE_WR, Output.WORKSPACE_NEXT);
 
+        // Voice: Move Notepad
+        fg.Single(Speech.MOVE_AUP_NOTEPAD, Output.NOTEPAD_UP);
+        fg.Single(Speech.MOVE_ADOWN_NOTEPAD, Output.NOTEPAD_DOWN);
+        fg.Single(Speech.MOVE_ALEFT_NOTEPAD, Output.NOTEPAD_LEFT);
+        fg.Single(Speech.MOVE_ARIGHT_NOTEPAD, Output.NOTEPAD_RIGHT);
+        
+        // Voice: Move Calculator
+        fg.Single(Speech.MOVE_AUP_CALC, Output.CALC_UP);
+        fg.Single(Speech.MOVE_ADOWN_CALC, Output.CALC_DOWN);
+        fg.Single(Speech.MOVE_ALEFT_CALC, Output.CALC_LEFT);
+        fg.Single(Speech.MOVE_ARIGHT_CALC, Output.CALC_RIGHT);
+        
+        // Fusion: Move Notepad
         fg.Complementary(Speech.NOTEPAD, SecondMod.MOVE_AU , Output.NOTEPAD_UP);
         fg.Complementary(Speech.NOTEPAD, SecondMod.MOVE_AD , Output.NOTEPAD_DOWN);
         fg.Complementary(Speech.NOTEPAD, SecondMod.MOVE_AL , Output.NOTEPAD_LEFT);
         fg.Complementary(Speech.NOTEPAD, SecondMod.MOVE_AR , Output.NOTEPAD_RIGHT);
+
+        // Fusion: Move Calculator
+        fg.Complementary(Speech.CALC, SecondMod.MOVE_AU , Output.CALC_UP);
+        fg.Complementary(Speech.CALC, SecondMod.MOVE_AD , Output.CALC_DOWN);
+        fg.Complementary(Speech.CALC, SecondMod.MOVE_AL , Output.CALC_LEFT);
+        fg.Complementary(Speech.CALC, SecondMod.MOVE_AR , Output.CALC_RIGHT);
+
 
         // fg.Single(Speech.CIRCLE, Output.CIRCLE); //EXAMPLE
         // fg.Redundancy(Speech.CIRCLE, SecondMod.CIRCLE, Output.CIRCLE); //EXAMPLE
